@@ -1,4 +1,4 @@
-package models;
+package AST;
 
 import java.util.LinkedList;
 
@@ -34,6 +34,13 @@ public class Node {
 
 	public Command getCommand() {
 		return command;
+	}
+	
+	public void recursivePrint(int index){
+		System.out.println(index + " : " + this.command + " : " + this.childs.size());
+		for(Node child : childs){
+			child.recursivePrint(index+1);
+		}
 	}
 	
 	
