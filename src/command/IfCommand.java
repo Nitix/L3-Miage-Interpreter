@@ -1,5 +1,6 @@
 package command;
 
+
 public class IfCommand implements Command {
 
 	@Override

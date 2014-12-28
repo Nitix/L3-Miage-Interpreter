@@ -1,5 +1,5 @@
 package parser;
 
-public class UnexceptedEndOfFileException extends Exception {
+public class UnexceptedEndOfFileException extends ParserException {
 
 }

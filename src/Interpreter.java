@@ -3,6 +3,7 @@ import java.io.IOException;
 
 import parser.IncorrectConversionException;
 import parser.Parser;
+import parser.ParserException;
 import parser.SyntaxErrorException;
 import parser.UnexceptedEndOfFileException;
 import parser.VariableNotDeclaredException;
@@ -23,6 +24,7 @@ public class Interpreter {
 			e.printStackTrace();
 		} catch (SyntaxErrorException e) {
 			// TODO Auto-generated catch block
+			System.out.println("Syntax Error : Ligne " + e.getLineNumber());
 			e.printStackTrace();
 		} catch (VariableNotDeclaredException e) {
 			// TODO Auto-generated catch block
@@ -33,7 +35,7 @@ public class Interpreter {
 		} catch (UnexceptedEndOfFileException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
+		} 
 	}
 
 }

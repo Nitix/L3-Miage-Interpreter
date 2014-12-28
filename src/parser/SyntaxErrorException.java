@@ -1,6 +1,10 @@
 package parser;
 
-public class SyntaxErrorException extends Exception {
+public class SyntaxErrorException extends ParserException {
+
+	public SyntaxErrorException(int line) {
+		super(line);
+	}
 
 	/**
 	 * 

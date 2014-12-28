@@ -14,6 +14,7 @@ public class Node {
 	
 	public Node(Command command, Node father){
 		this.command = command;
+		this.father = father;
 	}
 	
 	public void add(Node node){
@@ -41,6 +42,8 @@ public class Node {
 		for(Node child : childs){
 			child.recursivePrint(index+1);
 		}
+		if(index == 0)
+			System.out.println("END of tree");
 	}
 	
 	

@@ -1,5 +1,5 @@
 package parser;
 
-public class IncorrectConversionException extends Exception {
+public class IncorrectConversionException extends ParserException {
 
 }

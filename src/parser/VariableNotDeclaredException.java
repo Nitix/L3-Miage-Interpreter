@@ -1,5 +1,5 @@
 package parser;
 
-public class VariableNotDeclaredException extends Exception {
+public class VariableNotDeclaredException extends ParserException {
 
 }
