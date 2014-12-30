@@ -21,12 +21,10 @@ import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
-
-
 public class Fenetre extends Application {
 
 	// Main method who launch the application.
-	public static void main (String[] args){
+	public static void main(String[] args) {
 		launch(args);
 	}
 
@@ -43,7 +41,7 @@ public class Fenetre extends Application {
 		vbox.setSpacing(10);
 		vbox.setPadding(new Insets(10, 10, 10, 10));
 
-		// Create window element and action.	
+		// Create window element and action.
 		// MenuBar
 		MenuBar choice = new MenuBar();
 
@@ -61,21 +59,25 @@ public class Fenetre extends Application {
 		FileChooser fileChooser = new FileChooser();
 		fileChooser.setTitle("Open Resource File");
 
-		// Item of MenuBar : 
-		// First Menu : 
+		// Item of MenuBar :
+		// First Menu :
 		Label menuLabel = new Label("In Ligne Command");
 		menuLabel.setOnMouseClicked(new EventHandler<MouseEvent>() {
 			public void handle(MouseEvent event) {
-				if(vbox.getChildren().contains(chooser) || vbox.getChildren().contains(titleChooser)){
+				if (vbox.getChildren().contains(chooser)
+						|| vbox.getChildren().contains(titleChooser)) {
 					vbox.getChildren().clear();
 				}
-				if(!vbox.getChildren().contains(manualcommand) || !vbox.getChildren().contains(title)){
-					validatecommand.setOnAction(new EventHandler<ActionEvent>() {
-						public void handle(ActionEvent event) {
-							//TODO
-						}
-					});
-					vbox.getChildren().addAll(title,manualcommand,validatecommand,response,responsecommand);
+				if (!vbox.getChildren().contains(manualcommand)
+						|| !vbox.getChildren().contains(title)) {
+					validatecommand
+							.setOnAction(new EventHandler<ActionEvent>() {
+								public void handle(ActionEvent event) {
+									// TODO
+								}
+							});
+					vbox.getChildren().addAll(title, manualcommand,
+							validatecommand, response, responsecommand);
 				}
 				vbox.setVisible(true);
 			}
@@ -83,23 +85,27 @@ public class Fenetre extends Application {
 		Menu commandligne = new Menu();
 		commandligne.setGraphic(menuLabel);
 
-		// Second Menu : 
+		// Second Menu :
 		Label menuLabel2 = new Label("Import File");
 		menuLabel2.setOnMouseClicked(new EventHandler<MouseEvent>() {
 			public void handle(MouseEvent event) {
-				if(vbox.getChildren().contains(manualcommand) || vbox.getChildren().contains(title)){
+				if (vbox.getChildren().contains(manualcommand)
+						|| vbox.getChildren().contains(title)) {
 					vbox.getChildren().clear();
 				}
-				if(!vbox.getChildren().contains(chooser) || !vbox.getChildren().contains(titleChooser)){
+				if (!vbox.getChildren().contains(chooser)
+						|| !vbox.getChildren().contains(titleChooser)) {
 					chooser.setOnAction(new EventHandler<ActionEvent>() {
 						public void handle(ActionEvent event) {
-							File file = fileChooser.showOpenDialog(primaryStage);
-		                    if (file != null) {
-		                       //TODO
-		                    }
+							File file = fileChooser
+									.showOpenDialog(primaryStage);
+							if (file != null) {
+								// TODO
+							}
 						}
 					});
-					vbox.getChildren().addAll(titleChooser, chooser,response,responsecommand);
+					vbox.getChildren().addAll(titleChooser, chooser, response,
+							responsecommand);
 				}
 				vbox.setVisible(true);
 			}
@@ -112,9 +118,9 @@ public class Fenetre extends Application {
 
 		// Scene.
 		// Insert MenuBar & Vbox.
-		((VBox) scene.getRoot()).getChildren().addAll(choice,vbox);
+		((VBox) scene.getRoot()).getChildren().addAll(choice, vbox);
 
-		//Final method for the correct execution.
+		// Final method for the correct execution.
 		primaryStage.setScene(scene);
 		primaryStage.show();
 	}

@@ -1,13 +1,15 @@
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
+import AST.InexistantVariableException;
+import AST.VariableAlreadyExistException;
+import command.IncorrectMethodCallException;
+import command.VariableNotDeclaredException;
 import parser.IncorrectConversionException;
 import parser.Parser;
 import parser.ParserException;
 import parser.SyntaxErrorException;
 import parser.UnexceptedEndOfFileException;
-import parser.VariableNotDeclaredException;
-
 
 public class Interpreter {
 
@@ -15,7 +17,14 @@ public class Interpreter {
 		try {
 			Parser p = new Parser("test.ji");
 			p.parse();
-			p.ast.getRacine().recursivePrint(0);
+			try {
+				p.ast.execute();
+			} catch (VariableAlreadyExistException
+					| IncorrectMethodCallException
+					| InexistantVariableException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -35,7 +44,7 @@ public class Interpreter {
 		} catch (UnexceptedEndOfFileException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} 
+		}
 	}
 
 }

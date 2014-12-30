@@ -9,7 +9,6 @@ import java.io.PushbackReader;
 
 import command.*;
 import AST.AST;
-import AST.Data;
 import AST.Node;
 
 public class Parser {
@@ -17,9 +16,6 @@ public class Parser {
 	private PushbackReader reader;
 
 	public AST ast = new AST(); // FIXME DEBUG ONLY
-
-	private Data data = new Data();
-
 	private String unReadCommand = null;
 
 	private boolean isLoop = false;
@@ -80,7 +76,7 @@ public class Parser {
 			SyntaxErrorException, VariableNotDeclaredException,
 			IncorrectConversionException {
 		String command = this.readCommandName();
-		Node assign = new Node(new AssignCommand(), node);
+		Node assign = new Node(new AssignCommand(var), node);
 		node.add(assign);
 		if (!command.equalsIgnoreCase(":="))
 			throw new SyntaxErrorException(this.line);
@@ -169,7 +165,6 @@ public class Parser {
 				isUniqueChar = false;
 			}
 		}
-		System.out.println(command);
 		return command;
 	}
 
@@ -488,7 +483,7 @@ public class Parser {
 			// La valeur est un booléen
 			if (command.equalsIgnoreCase("true")
 					|| command.equalsIgnoreCase("false")) {
-				value = new Node(new BooleanVariable(command), this.currentNode);
+				value = new Node(new BooleanType(command), this.currentNode);
 				this.currentNode.add(value);
 				this.isBooleanExpression = true;
 				this.needBooleanOperator = true;
@@ -499,7 +494,7 @@ public class Parser {
 			} else if (isInteger(command)) {
 				if (isNotCommand)
 					throw new SyntaxErrorException(line);
-				value = new Node(new IntegerVariable(command), this.currentNode);
+				value = new Node(new IntegerType(command), this.currentNode);
 				this.currentNode.add(value);
 				this.needBooleanOperator = false;
 
@@ -522,7 +517,8 @@ public class Parser {
 					// Utilisation de variable, aucune erreur ne peut être
 					// detecté
 					// sans calcul.
-					value = new Node(new Variable(command), this.currentNode);
+					value = new Node(new VariableCommand(command),
+							this.currentNode);
 					this.currentNode.add(value);
 					this.isBooleanExpression = true;
 					this.needBooleanOperator = false;
