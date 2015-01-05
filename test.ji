@@ -22,4 +22,8 @@ let var1 in
 		end
 		var1 := var1 * 3 + 1;
 	end
+	if 2 + 6 * 9  + 2 < 2 + 9 + var1 
+	then
+		
+	end
 end
