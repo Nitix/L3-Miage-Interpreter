@@ -2,15 +2,17 @@ package command;
 
 import java.util.UUID;
 
-import parser.IncorrectConversionException;
+import exception.IncorrectConversionException;
 import AST.Data;
 import AST.Fork;
-import AST.InexistantVariableException;
 import AST.Node;
 import AST.Variable;
-import AST.VariableAlreadyExistException;
 
 public class ForkCommand extends Command {	
+
+	public ForkCommand(int line) {
+		super(line, "fork()");
+	}
 
 	@Override
 	public String toString() {
@@ -43,13 +45,13 @@ public class ForkCommand extends Command {
 	@Override
 	public String getForkName(Data data) throws IncorrectMethodCallException,
 			InexistantVariableException {
-		return data.getVariable(getUuid()).getForkName();
+		return data.getVariable(this.getUuid(), this.getLine()).getForkName();
 	}
 
 	@Override
 	public Fork getFork(Data data) throws IncorrectMethodCallException,
 			InexistantVariableException {
-		return data.getVariable(getUuid()).getFork();
+		return data.getVariable(this.getUuid(), this.getLine()).getFork();
 	}
 
 

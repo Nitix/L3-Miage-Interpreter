@@ -2,13 +2,15 @@ package command;
 
 import java.util.LinkedList;
 
-import parser.IncorrectConversionException;
+import exception.IncorrectConversionException;
 import AST.Data;
-import AST.InexistantVariableException;
 import AST.Node;
-import AST.VariableAlreadyExistException;
 
 public class WhileCommand extends Command {
+
+	public WhileCommand(int line) {
+		super(line, "while");
+	}
 
 	@Override
 	public String toString() {
@@ -24,7 +26,7 @@ public class WhileCommand extends Command {
 		Command exp = childs.get(0).getCommand();
 		exp.execute(childs.get(0), data);
 		if (!exp.hasBooleanValue(data)) {
-			throw new IncorrectConversionException();
+			throw new IncorrectConversionException(this.getLine(), this.getCommand());
 		}
 		while (exp.getBooleanValue(data)) {
 			exp.removeVariable(data);
@@ -32,7 +34,7 @@ public class WhileCommand extends Command {
 			childs.get(1).removeVariable(data);
 			exp.execute(childs.get(0), data);
 			if (!exp.hasBooleanValue(data)) {
-				throw new IncorrectConversionException();
+				throw new IncorrectConversionException(this.getLine(), this.getCommand());
 			}
 		}
 	}

@@ -2,14 +2,16 @@ package command;
 
 import java.util.LinkedList;
 
-import parser.IncorrectConversionException;
+import exception.IncorrectConversionException;
 import AST.Data;
-import AST.InexistantVariableException;
 import AST.Node;
 import AST.Variable;
-import AST.VariableAlreadyExistException;
 
 public class Devided extends Command {
+
+	public Devided(int line) {
+		super(line, "/");
+	}
 
 	public static boolean isDividedCommand(String command) {
 		return command.equals("/");
@@ -32,11 +34,11 @@ public class Devided extends Command {
 		Command command2 = node2.getCommand();
 		command1.execute(node1, data);
 		if (!command1.hasIntValue(data)) {
-			throw new IncorrectConversionException();
+			throw new IncorrectConversionException(this.getLine(), this.getCommand());
 		}
 		command2.execute(node2, data);
 		if (!command2.hasIntValue(data)) {
-			throw new IncorrectConversionException();
+			throw new IncorrectConversionException(this.getLine(), this.getCommand());
 		}
 		Variable var = new Variable();
 		var.setIntValue(command1.getIntValue(data) / command2.getIntValue(data));
@@ -56,6 +58,6 @@ public class Devided extends Command {
 	@Override
 	public int getIntValue(Data data) throws IncorrectMethodCallException,
 			InexistantVariableException {
-		return data.getVariable(this.getUuid()).getIntValue();
+		return data.getVariable(this.getUuid(), this.getLine()).getIntValue();
 	}
 }

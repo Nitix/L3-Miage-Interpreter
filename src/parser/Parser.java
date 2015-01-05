@@ -8,6 +8,7 @@ import java.io.InputStreamReader;
 import java.io.PushbackReader;
 
 import command.*;
+import exception.IncorrectConversionException;
 import AST.AST;
 import AST.Node;
 
@@ -52,7 +53,7 @@ public class Parser {
 		if (command.equalsIgnoreCase("end")) { // Fin de boucle on retourne en
 												// arrière
 			if (!this.isLoop) {
-				throw new SyntaxErrorException(this.line);
+				throw new SyntaxErrorException(this.line, command);
 			} else {
 				this.isLoop = false;
 			}
@@ -66,7 +67,7 @@ public class Parser {
 			this.isFinish = true;
 		} else {
 			if (Utils.isCommand(command))
-				throw new SyntaxErrorException(this.line);
+				throw new SyntaxErrorException(this.line, command);
 			this.readAffectionCommand(command, node);
 		}
 	}
@@ -76,14 +77,14 @@ public class Parser {
 			SyntaxErrorException, VariableNotDeclaredException,
 			IncorrectConversionException {
 		String command = this.readCommandName();
-		Node assign = new Node(new AssignCommand(var), node);
+		Node assign = new Node(new AssignCommand(var, line), node);
 		node.add(assign);
 		if (!command.equalsIgnoreCase(":="))
-			throw new SyntaxErrorException(this.line);
+			throw new SyntaxErrorException(this.line, command, ":= expected");
 
 		command = this.readCommandName();
 		if (command.equalsIgnoreCase("fork()")) {
-			Node n = new Node(new ForkCommand(), assign);
+			Node n = new Node(new ForkCommand(line), assign);
 			assign.add(n);
 		} else {
 			this.unReadCommand = command;
@@ -91,7 +92,7 @@ public class Parser {
 		}
 		command = this.readCommandName();
 		if (!command.equalsIgnoreCase(";"))
-			throw new SyntaxErrorException(this.line);
+			throw new SyntaxErrorException(this.line, command, "; expected");
 	}
 
 	private void readLetcommand(Node node) throws UnexceptedEndOfFileException,
@@ -99,28 +100,28 @@ public class Parser {
 			IncorrectConversionException {
 		String var = this.readCommandName();
 		if (Utils.isCommand(var))
-			throw new SyntaxErrorException(this.line);
+			throw new SyntaxErrorException(this.line, var);
 		String command = this.readCommandName();
 		Node let;
 		if (command.equalsIgnoreCase("in")) {
-			let = new Node(new DeclareCommand(var), node);
+			let = new Node(new DeclareCommand(var, line), node);
 			node.add(let);
 		} else {
 			if (!command.equalsIgnoreCase("be")) {
-				throw new SyntaxErrorException(this.line);
+				throw new SyntaxErrorException(this.line, command);
 			}
 			String alias = this.readCommandName();
 			if (Utils.isCommand(alias))
-				throw new SyntaxErrorException(this.line);
+				throw new SyntaxErrorException(this.line, command);
 			if (alias.equalsIgnoreCase("var"))
-				throw new SyntaxErrorException(this.line);
-			let = new Node(new AliasCommand(var, alias), node);
+				throw new SyntaxErrorException(this.line, command);
+			let = new Node(new AliasCommand(var, alias, line), node);
 			node.add(let);
 			command = this.readCommandName();
 			if (!command.equalsIgnoreCase("in"))
-				throw new SyntaxErrorException(this.line);
+				throw new SyntaxErrorException(this.line, command);
 		}
-		Node container = new Node(new Container(), let);
+		Node container = new Node(new Container(line, command), let);
 		let.add(container);
 		command = this.readCommandName();
 		while (!command.equalsIgnoreCase("end")) {
@@ -141,7 +142,7 @@ public class Parser {
 		int charac = reader.read();
 		String command = "";
 		if (charac == -1)
-			throw new UnexceptedEndOfFileException();
+			throw new UnexceptedEndOfFileException(line, command);
 
 		boolean ok = false;
 		boolean isUniqueChar = true;
@@ -173,7 +174,7 @@ public class Parser {
 			IncorrectConversionException, UnexceptedEndOfFileException {
 
 		// Ajout de la commande dans l'arbre
-		Node ifnode = new Node(new IfCommand(), node);
+		Node ifnode = new Node(new IfCommand(line), node);
 		node.add(ifnode);
 
 		// Condition
@@ -182,9 +183,9 @@ public class Parser {
 		// Then
 		String command = this.readCommandName();
 		if (!command.equalsIgnoreCase("then")) { // La commande a execute
-			throw new SyntaxErrorException(this.line);
+			throw new SyntaxErrorException(this.line, command, "then expected");
 		}
-		Node thennode = new Node(new Container(), ifnode);
+		Node thennode = new Node(new Container(line, command), ifnode);
 		ifnode.add(thennode);
 
 		command = this.readCommandName();
@@ -197,7 +198,7 @@ public class Parser {
 
 		// Else
 		if (command.equalsIgnoreCase("else")) {
-			Node elsenode = new Node(new Container(), ifnode);
+			Node elsenode = new Node(new Container(line, command), ifnode);
 			ifnode.add(elsenode);
 			command = this.readCommandName();
 			while (!command.equalsIgnoreCase("end")) {
@@ -212,7 +213,7 @@ public class Parser {
 			UnexceptedEndOfFileException, IOException,
 			VariableNotDeclaredException, IncorrectConversionException {
 		// Ajout de la commande dans l'arbre
-		Node whilenode = new Node(new WhileCommand(), node);
+		Node whilenode = new Node(new WhileCommand(line), node);
 		node.add(whilenode);
 
 		// Condition
@@ -221,9 +222,9 @@ public class Parser {
 		// Then
 		String command = this.readCommandName();
 		if (!command.equalsIgnoreCase("do")) { // La commande a execute
-			throw new SyntaxErrorException(this.line);
+			throw new SyntaxErrorException(this.line, command, "do expected");
 		}
-		Node donode = new Node(new Container(), whilenode);
+		Node donode = new Node(new Container(line, command), whilenode);
 		whilenode.add(donode);
 		command = this.readCommandName();
 		while (!command.equalsIgnoreCase("end")) {
@@ -361,28 +362,28 @@ public class Parser {
 				}
 			}
 			if (this.needBooleanExpression || this.needNextValue)
-				throw new SyntaxErrorException(line);
+				throw new SyntaxErrorException(line, "Expression", "End of expression needed");
 		}
 
 		private void readOperator() throws UnexceptedEndOfFileException,
 				IOException, SyntaxErrorException {
 			String command = readCommandName();
 			if (!Utils.isOperatorCommand(command))
-				throw new SyntaxErrorException(line);
+				throw new SyntaxErrorException(line, command, "Operator expected");
 			if (this.needBooleanOperator
 					&& !Utils.isBooleanOperatorCommand(command))
-				throw new SyntaxErrorException(line);
+				throw new SyntaxErrorException(line, command, "Boolean expected");
 
 			if (Utils.isBooleanOperatorCommand(command)) {
 				if (!this.isBooleanExpression)
-					throw new SyntaxErrorException(line);
+					throw new SyntaxErrorException(line, command, "Can not use int with boolean expression");
 				Node operator;
 				if (command.equalsIgnoreCase("and")) {
-					operator = new Node(new AndOperator(),
+					operator = new Node(new AndOperator(line),
 							this.topBooleanNode.getFather());
 
 				} else {
-					operator = new Node(new OrOperator(),
+					operator = new Node(new OrOperator(line),
 							this.topBooleanNode.getFather());
 
 				}
@@ -402,9 +403,9 @@ public class Parser {
 				if (Utils.isPrioArithmeticOperatorCommand(command)) {
 					Command commandC;
 					if (Times.isTimesCommand(command)) {
-						commandC = new Times();
+						commandC = new Times(line);
 					} else {
-						commandC = new Devided();
+						commandC = new Devided(line);
 					}
 
 					Node n = new Node(commandC, currentNode.getFather());
@@ -423,9 +424,9 @@ public class Parser {
 				} else {
 					Command commandC;
 					if (Plus.isPlusCommand(command)) {
-						commandC = new Plus();
+						commandC = new Plus(line);
 					} else {
-						commandC = new Minus();
+						commandC = new Minus(line);
 					}
 					Node father;
 					Node child;
@@ -443,10 +444,10 @@ public class Parser {
 			} else {
 				Node operator;
 				if (command.equalsIgnoreCase("<")) {
-					operator = new Node(new LowerComparatorCommand(),
+					operator = new Node(new LowerComparatorCommand(line),
 							this.simpleOperatorNode.getFather());
 				} else {
-					operator = new Node(new EqualComparatorCommand(),
+					operator = new Node(new EqualComparatorCommand(line),
 							this.simpleOperatorNode.getFather());
 				}
 				this.simpleOperatorNode.getFather().remplace(
@@ -473,13 +474,13 @@ public class Parser {
 				IOException, VariableNotDeclaredException, SyntaxErrorException {
 			String command = readCommandName();
 			if (Utils.isSystemCommand(command))
-				throw new SyntaxErrorException(line);
+				throw new SyntaxErrorException(line, command, "Value expected");
 
 			Node value;
 			// La valeur est un booléen
 			if (command.equalsIgnoreCase("true")
 					|| command.equalsIgnoreCase("false")) {
-				value = new Node(new BooleanType(command), this.currentNode);
+				value = new Node(new BooleanType(command, line), this.currentNode);
 				this.currentNode.add(value);
 				this.isBooleanExpression = true;
 				this.needBooleanOperator = true;
@@ -489,8 +490,8 @@ public class Parser {
 				// La valeur est un entier
 			} else if (isInteger(command)) {
 				if (isNotCommand)
-					throw new SyntaxErrorException(line);
-				value = new Node(new IntegerType(command), this.currentNode);
+					throw new SyntaxErrorException(line, command, "Can not convert an int to boolean");
+				value = new Node(new IntegerType(command, line), this.currentNode);
 				this.currentNode.add(value);
 				this.needBooleanOperator = false;
 
@@ -499,7 +500,7 @@ public class Parser {
 					// Utilisation de variable, aucune erreur ne peut être
 					// detecté
 					// sans calcul.
-					value = new Node(new NotCommand(), this.currentNode);
+					value = new Node(new NotCommand(line), this.currentNode);
 					this.currentNode.add(value);
 					this.isBooleanExpression = true;
 					this.needBooleanOperator = false;
@@ -513,7 +514,7 @@ public class Parser {
 					// Utilisation de variable, aucune erreur ne peut être
 					// detecté
 					// sans calcul.
-					value = new Node(new VariableCommand(command),
+					value = new Node(new VariableCommand(command, line),
 							this.currentNode);
 					this.currentNode.add(value);
 					this.isBooleanExpression = true;

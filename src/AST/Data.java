@@ -4,6 +4,9 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Set;
 
+import command.InexistantVariableException;
+import command.VariableAlreadyExistException;
+
 public class Data implements Serializable {
 
 	private HashMap<String, Variable> variables = new HashMap<>();
@@ -12,10 +15,10 @@ public class Data implements Serializable {
 		return this.variables.containsKey(command);
 	}
 
-	public void declareVariable(String nameVariable)
+	public void declareVariable(String nameVariable, int line)
 			throws VariableAlreadyExistException {
 		if (this.variables.containsKey(nameVariable))
-			throw new VariableAlreadyExistException();
+			throw new VariableAlreadyExistException(line, nameVariable);
 		Variable var = new Variable();
 		this.addVariable(nameVariable, var);
 	}
@@ -37,10 +40,10 @@ public class Data implements Serializable {
 		return data;
 	}
 
-	public Variable getVariable(String nameVariable)
+	public Variable getVariable(String nameVariable, int line)
 			throws InexistantVariableException {
 		if (!this.variables.containsKey(nameVariable))
-			throw new InexistantVariableException();
+			throw new InexistantVariableException(line, nameVariable);
 		return this.variables.get(nameVariable);
 	}
 

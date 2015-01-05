@@ -1,20 +1,20 @@
 package command;
 
-import parser.IncorrectConversionException;
+import exception.IncorrectConversionException;
 import AST.Data;
-import AST.InexistantVariableException;
 import AST.Node;
-import AST.VariableAlreadyExistException;
 
 public class BooleanType extends Command {
 
 	private boolean value;
 
-	public BooleanType(boolean value) {
+	public BooleanType(boolean value, int line) {
+		super(line, Boolean.toString(value));
 		this.value = value;
 	}
 
-	public BooleanType(String command) {
+	public BooleanType(String command, int line) {
+		super(line, command);
 		this.value = Boolean.parseBoolean(command);
 	}
 
@@ -33,7 +33,7 @@ public class BooleanType extends Command {
 	@Override
 	public boolean hasBooleanValue(Data data)
 			throws InexistantVariableException {
-		return false;
+		return true;
 	}
 
 	@Override

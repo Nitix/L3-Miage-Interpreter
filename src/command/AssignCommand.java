@@ -1,17 +1,16 @@
 package command;
 
-import parser.IncorrectConversionException;
+import exception.IncorrectConversionException;
 import AST.Data;
-import AST.InexistantVariableException;
 import AST.Node;
 import AST.Variable;
-import AST.VariableAlreadyExistException;
 
 public class AssignCommand extends Command {
 
 	private String nameVariable;
 
-	public AssignCommand(String name) {
+	public AssignCommand(String name, int line) {
+		super(line, ":=");
 		this.nameVariable = name;
 	}
 
@@ -30,7 +29,7 @@ public class AssignCommand extends Command {
 		Command valueCommand = value.getCommand();
 		Variable var = new Variable();
 		if(!valueCommand.hasValue(data))
-			throw new IncorrectMethodCallException();
+			throw new IncorrectMethodCallException(this.getLine(), this.getCommand());
 		if(valueCommand.hasIntValue(data)){
 			var.setIntValue(valueCommand.getIntValue(data));
 		}else if(valueCommand.hasBooleanValue(data)){
@@ -38,7 +37,7 @@ public class AssignCommand extends Command {
 		}else if(valueCommand.isFork(data)){
 			var.setFork(valueCommand.getFork(data), valueCommand.getForkName(data));
 		}else{
-			throw new IncorrectConversionException();
+			throw new IncorrectConversionException(this.getLine(), this.getCommand());
 		}
 		data.addVariable(nameVariable, var);
 		value.removeVariable(data);

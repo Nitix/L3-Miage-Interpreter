@@ -1,22 +1,17 @@
 package parser;
 
-public class ParserException extends Exception {
+import exception.InterpreterException;
 
-	private int ligneNumber = 0;
+public class ParserException extends InterpreterException {
 
-	private String command = "";
-
-	private String message = "";
-
-	public ParserException() {
-
+	public ParserException(int line, String command, String message) {
+		super(line, command, message);
+		// TODO Auto-generated constructor stub
 	}
 
-	public ParserException(int line) {
-		this.ligneNumber = line;
+	public ParserException(int line, String command) {
+		super(line, command);
+		// TODO Auto-generated constructor stub
 	}
 
-	public int getLineNumber() {
-		return ligneNumber;
-	}
 }

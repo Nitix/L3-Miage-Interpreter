@@ -2,14 +2,16 @@ package command;
 
 import java.util.LinkedList;
 
-import parser.IncorrectConversionException;
+import exception.IncorrectConversionException;
 import AST.Data;
-import AST.InexistantVariableException;
 import AST.Node;
 import AST.Variable;
-import AST.VariableAlreadyExistException;
 
 public class EqualComparatorCommand extends Command {
+
+	public EqualComparatorCommand(int line) {
+		super(line, "=");
+	}
 
 	@Override
 	public String toString() {
@@ -33,19 +35,19 @@ public class EqualComparatorCommand extends Command {
 
 		if (command1.hasBooleanValue(data)) {
 			if (!command2.hasBooleanValue(data)) {
-				throw new IncorrectConversionException();
+				throw new IncorrectConversionException(this.getLine(), this.getCommand());
 			}
 			var.setBooleanValue(command1.getBooleanValue(data) == command2
 					.getBooleanValue(data));
 		} else {
 			if (command1.hasIntValue(data)) {
 				if (!command2.hasIntValue(data)) {
-					throw new IncorrectConversionException();
+					throw new IncorrectConversionException(this.getLine(), this.getCommand());
 				}
 				var.setBooleanValue(command1.getIntValue(data) == command2
 						.getIntValue(data));
 			} else {
-				throw new IncorrectConversionException();
+				throw new IncorrectConversionException(this.getLine(), this.getCommand());
 			}
 		}
 
@@ -65,6 +67,6 @@ public class EqualComparatorCommand extends Command {
 	@Override
 	public boolean getBooleanValue(Data data)
 			throws IncorrectMethodCallException, InexistantVariableException {
-		return data.getVariable(this.getUuid()).getBooleanValue();
+		return data.getVariable(this.getUuid(), this.getLine()).getBooleanValue();
 	}
 }

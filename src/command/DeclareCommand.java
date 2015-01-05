@@ -1,16 +1,15 @@
 package command;
 
-import parser.IncorrectConversionException;
+import exception.IncorrectConversionException;
 import AST.Data;
-import AST.InexistantVariableException;
 import AST.Node;
-import AST.VariableAlreadyExistException;
 
 public class DeclareCommand extends Command {
 
 	private String nameVariable;
 
-	public DeclareCommand(String name) {
+	public DeclareCommand(String name, int line) {
+		super(line, "let " + name);
 		this.nameVariable = name;
 	}
 
@@ -24,7 +23,7 @@ public class DeclareCommand extends Command {
 			throws VariableAlreadyExistException, IncorrectConversionException,
 			IncorrectMethodCallException, InexistantVariableException,
 			VariableNotDeclaredException {
-		data.declareVariable(nameVariable);
+		data.declareVariable(nameVariable,this.getLine());
 		node.getChilds().get(0).execute(data);
 		node.getChilds().get(0).removeVariable(data);
 		data.removeVariable(nameVariable);

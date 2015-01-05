@@ -2,13 +2,15 @@ package command;
 
 import java.util.LinkedList;
 
-import parser.IncorrectConversionException;
+import exception.IncorrectConversionException;
 import AST.Data;
-import AST.InexistantVariableException;
 import AST.Node;
-import AST.VariableAlreadyExistException;
 
 public class IfCommand extends Command {
+
+	public IfCommand(int line) {
+		super(line, "if");
+	}
 
 	@Override
 	public String toString() {
@@ -24,7 +26,7 @@ public class IfCommand extends Command {
 		Command exp = childs.get(0).getCommand();
 		exp.execute(childs.get(0), data);
 		if (!exp.hasValue(data)) {
-			throw new IncorrectConversionException();
+			throw new IncorrectConversionException(this.getLine(), this.getCommand());
 		}
 		if(exp.hasBooleanValue(data)){
 			if (exp.getBooleanValue(data)) {
@@ -57,7 +59,7 @@ public class IfCommand extends Command {
 				}
 			}
 		}else{
-			throw new IncorrectMethodCallException();
+			throw new IncorrectMethodCallException(this.getLine(), this.getCommand());
 		}
 		exp.removeVariable(data);
 	}

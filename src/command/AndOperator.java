@@ -2,14 +2,16 @@ package command;
 
 import java.util.LinkedList;
 
-import parser.IncorrectConversionException;
+import exception.IncorrectConversionException;
 import AST.Data;
-import AST.InexistantVariableException;
 import AST.Node;
 import AST.Variable;
-import AST.VariableAlreadyExistException;
 
 public class AndOperator extends Command {
+
+	public AndOperator(int line) {
+		super(line, "and");
+	}
 
 	@Override
 	public String toString() {
@@ -28,11 +30,11 @@ public class AndOperator extends Command {
 		Command command2 = node2.getCommand();
 		command1.execute(node1, data);
 		if (!command1.hasBooleanValue(data)) {
-			throw new IncorrectConversionException();
+			throw new IncorrectConversionException(this.getLine(), this.getCommand());
 		}
 		command2.execute(node2, data);
 		if (!command2.hasBooleanValue(data)) {
-			throw new IncorrectConversionException();
+			throw new IncorrectConversionException(this.getLine(), this.getCommand());
 		}
 		Variable var = new Variable();
 		var.setBooleanValue(command1.getBooleanValue(data)
@@ -53,6 +55,6 @@ public class AndOperator extends Command {
 	@Override
 	public boolean getBooleanValue(Data data)
 			throws IncorrectMethodCallException, InexistantVariableException {
-		return data.getVariable(this.getUuid()).getBooleanValue();
+		return data.getVariable(this.getUuid(), this.getLine()).getBooleanValue();
 	}
 }

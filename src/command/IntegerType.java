@@ -1,10 +1,8 @@
 package command;
 
-import parser.IncorrectConversionException;
+import exception.IncorrectConversionException;
 import AST.Data;
-import AST.InexistantVariableException;
 import AST.Node;
-import AST.VariableAlreadyExistException;
 
 public class IntegerType extends Command {
 
@@ -15,11 +13,13 @@ public class IntegerType extends Command {
 
 	private int value;
 
-	public IntegerType(int value) {
+	public IntegerType(int value, int line) {
+		super(line, ""+value);
 		this.value = value;
 	}
 
-	public IntegerType(String value) {
+	public IntegerType(String value, int line) {
+		super(line, value);
 		this.value = Integer.parseInt(value);
 	}
 

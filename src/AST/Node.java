@@ -2,10 +2,12 @@ package AST;
 
 import java.util.LinkedList;
 
-import parser.IncorrectConversionException;
 import command.Command;
 import command.IncorrectMethodCallException;
+import command.InexistantVariableException;
+import command.VariableAlreadyExistException;
 import command.VariableNotDeclaredException;
+import exception.IncorrectConversionException;
 
 public class Node {
 

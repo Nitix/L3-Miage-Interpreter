@@ -2,11 +2,9 @@ package command;
 
 import java.util.LinkedList;
 
-import parser.IncorrectConversionException;
+import exception.IncorrectConversionException;
 import AST.Data;
-import AST.InexistantVariableException;
 import AST.Node;
-import AST.VariableAlreadyExistException;
 
 /**
  * This class contains only orther commands They are usefull for : <br>
@@ -16,6 +14,10 @@ import AST.VariableAlreadyExistException;
  * </ul>
  */
 public class Container extends Command {
+
+	public Container(int line, String command) {
+		super(line, command);
+	}
 
 	@Override
 	public String toString() {

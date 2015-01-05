@@ -1,11 +1,9 @@
 package command;
 
-import parser.IncorrectConversionException;
+import exception.IncorrectConversionException;
 import AST.Data;
 import AST.Fork;
-import AST.InexistantVariableException;
 import AST.Node;
-import AST.VariableAlreadyExistException;
 
 public class VariableCommand extends Command {
 
@@ -16,11 +14,8 @@ public class VariableCommand extends Command {
 		return "Variable [name=" + name + "]";
 	}
 
-	public VariableCommand() {
-
-	}
-
-	public VariableCommand(String command) {
+	public VariableCommand(String command, int line) {
+		super(line, command);
 		this.name = command;
 	}
 
@@ -30,7 +25,7 @@ public class VariableCommand extends Command {
 			IncorrectMethodCallException, InexistantVariableException,
 			VariableNotDeclaredException {
 		if (!data.isDeclaredVariable(name)) {
-			throw new VariableNotDeclaredException();
+			throw new VariableNotDeclaredException(this.getLine(), this.getCommand());
 		}
 	}
 
@@ -39,35 +34,35 @@ public class VariableCommand extends Command {
 	}
 
 	public boolean hasIntValue(Data data) throws InexistantVariableException {
-		return data.getVariable(name).isIntValue();
+		return data.getVariable(name, this.getLine()).isIntValue();
 	}
 
 	public int getIntValue(Data data) throws IncorrectMethodCallException,
 			InexistantVariableException {
-		return data.getVariable(name).getIntValue();
+		return data.getVariable(name, this.getLine()).getIntValue();
 	}
 
 	public boolean hasBooleanValue(Data data)
 			throws InexistantVariableException {
-		return data.getVariable(name).isBooleanValue();
+		return data.getVariable(name, this.getLine()).isBooleanValue();
 	}
 
 	public boolean getBooleanValue(Data data)
 			throws IncorrectMethodCallException, InexistantVariableException {
-		return data.getVariable(name).getBooleanValue();
+		return data.getVariable(name, this.getLine()).getBooleanValue();
 	}
 
 	public boolean isFork(Data data) throws InexistantVariableException {
-		return data.getVariable(name).isFork();
+		return data.getVariable(name, this.getLine()).isFork();
 	}
 
 	public String getForkName(Data data) throws IncorrectMethodCallException,
 			InexistantVariableException {
-		return data.getVariable(name).getForkName();
+		return data.getVariable(name, this.getLine()).getForkName();
 	}
 	
 	public Fork getFork(Data data) throws IncorrectMethodCallException,
 	InexistantVariableException {
-		return data.getVariable(name).getFork();
+		return data.getVariable(name, this.getLine()).getFork();
 	}
 }

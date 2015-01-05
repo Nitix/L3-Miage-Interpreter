@@ -1,11 +1,11 @@
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-import AST.InexistantVariableException;
-import AST.VariableAlreadyExistException;
 import command.IncorrectMethodCallException;
+import command.InexistantVariableException;
+import command.VariableAlreadyExistException;
 import command.VariableNotDeclaredException;
-import parser.IncorrectConversionException;
+import exception.IncorrectConversionException;
 import parser.Parser;
 import parser.ParserException;
 import parser.SyntaxErrorException;
@@ -26,23 +26,20 @@ public class Interpreter {
 				e.printStackTrace();
 			}
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (SyntaxErrorException e) {
-			// TODO Auto-generated catch block
-			System.out.println("Syntax Error : Ligne " + e.getLineNumber());
+			System.out.println("Syntax Error : Ligne " + e.getLineNumber() + ", command : " + e.getCommand());
 			e.printStackTrace();
 		} catch (VariableNotDeclaredException e) {
-			// TODO Auto-generated catch block
+			System.out.println("Variable is not declared : Ligne " + e.getLineNumber() + ", command : " + e.getCommand());
 			e.printStackTrace();
 		} catch (IncorrectConversionException e) {
-			// TODO Auto-generated catch block
+			System.out.println("Incorrect conversion exception : Ligne " + e.getLineNumber() + ", command : " + e.getCommand());
 			e.printStackTrace();
 		} catch (UnexceptedEndOfFileException e) {
-			// TODO Auto-generated catch block
+			System.out.println("End of file unexpected : Ligne " + e.getLineNumber() + ", command : " + e.getCommand());
 			e.printStackTrace();
 		}
 	}

@@ -1,9 +1,10 @@
 package AST;
 
-import parser.IncorrectConversionException;
-
 import command.IncorrectMethodCallException;
+import command.InexistantVariableException;
+import command.VariableAlreadyExistException;
 import command.VariableNotDeclaredException;
+import exception.IncorrectConversionException;
 
 public class Fork extends Thread{
 	
