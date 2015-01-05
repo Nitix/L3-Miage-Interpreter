@@ -41,6 +41,8 @@ public class Container extends Command {
 		int index = childs.indexOf(child);
 		child.getCommand().partialExecute(child, data);
 		for(int i = index+1; i < childs.size(); i++){
+			if(data.isTerminated())
+				break;
 			child = childs.get(i);
 			child.execute(data);
 			child.removeVariable(data);

@@ -30,7 +30,7 @@ public class WaitCommand extends Command {
 		Variable var = new Variable();
 
 		if(fork.hasException()){
-			var.setIntValue(1);
+			var.setIntValue(-1);
 		}else{
 			var.setIntValue(0);
 		}

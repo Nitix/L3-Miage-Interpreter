@@ -213,7 +213,11 @@ public class Parser {
 								charac = reader.read();
 							}else if(charac == ')'){
 								if(!isparenthesis){
-									reader.unread(charac);
+									if(isUniqueChar){
+										command += (char) charac;
+									}else{
+										reader.unread(charac);
+									}
 									ok = true;
 								}else{
 									command += (char) charac;
