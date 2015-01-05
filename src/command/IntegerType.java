@@ -8,6 +8,11 @@ import AST.VariableAlreadyExistException;
 
 public class IntegerType extends Command {
 
+	@Override
+	public String toString() {
+		return "IntegerType [value=" + value + "]";
+	}
+
 	private int value;
 
 	public IntegerType(int value) {

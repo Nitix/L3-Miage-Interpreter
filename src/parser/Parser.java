@@ -337,8 +337,6 @@ public class Parser {
 
 		private boolean nextValueIsTop = true;
 
-		private boolean nextOperatorIsTop;
-
 		private boolean nextOperatorIsBooleanTop;
 
 		private boolean nextValueIsBooleanTop = true;
@@ -415,14 +413,11 @@ public class Parser {
 					currentNode.setFather(n);
 					n.add(currentNode);
 					if (!isPrio) {
-						if (this.nextOperatorIsTop) {
-							simpleOperatorNode = n;
-						} else {
-							simpleOperatorNode = currentNode.getFather();
-						}
 						isPrio = true;
+						if (this.nextValueIsTop) {
+							simpleOperatorNode = n;
+						}
 					}
-
 					currentNode = n;
 
 				} else {
@@ -443,6 +438,7 @@ public class Parser {
 					isPrio = false;
 					this.simpleOperatorNode = n;
 					this.currentNode = n;
+					this.nextValueIsTop = false;
 				}
 			} else {
 				Node operator;
@@ -457,6 +453,7 @@ public class Parser {
 						this.simpleOperatorNode, operator);
 				operator.add(simpleOperatorNode);
 				this.simpleOperatorNode.setFather(operator);
+
 				this.simpleOperatorNode = operator;
 				this.currentNode = operator;
 				this.nextValueIsTop = true;
@@ -470,7 +467,6 @@ public class Parser {
 			}
 			this.needOperator = false;
 			this.needNextValue = true;
-			this.nextOperatorIsTop = false;
 		}
 
 		private void readValue() throws UnexceptedEndOfFileException,
@@ -532,7 +528,6 @@ public class Parser {
 			}
 			this.needNextValue = false;
 			this.needOperator = true;
-			this.nextOperatorIsTop = true;
 			if (this.nextValueIsTop) {
 				this.simpleOperatorNode = value;
 				this.nextValueIsTop = false;
