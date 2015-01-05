@@ -3,6 +3,7 @@ package command;
 import java.util.UUID;
 
 import exception.IncorrectConversionException;
+import exception.InterpreterException;
 import AST.Data;
 import AST.Fork;
 import AST.Node;
@@ -26,9 +27,7 @@ public abstract class Command {
 	}
 
 	public abstract void execute(Node node, Data data)
-			throws VariableAlreadyExistException, IncorrectConversionException,
-			IncorrectMethodCallException, InexistantVariableException,
-			VariableNotDeclaredException;
+			throws InterpreterException, InterruptedException;
 
 	/**
 	 * Execute the command but do a partial execute on the first child
@@ -43,16 +42,12 @@ public abstract class Command {
 	 * @throws VariableNotDeclaredException
 	 */
 	public void executeAtChilds(Node node, Data data, Node child)
-			throws VariableAlreadyExistException, IncorrectConversionException,
-			IncorrectMethodCallException, InexistantVariableException,
-			VariableNotDeclaredException {
+			throws InterpreterException, InterruptedException {
 		throw new IncorrectMethodCallException(line, command);
 	}
 
 	public void partialExecute(Node node, Data data)
-			throws VariableAlreadyExistException, IncorrectConversionException,
-			IncorrectMethodCallException, InexistantVariableException,
-			VariableNotDeclaredException {
+			throws InterpreterException, InterruptedException {
 		throw new IncorrectMethodCallException(line, command);
 	}
 

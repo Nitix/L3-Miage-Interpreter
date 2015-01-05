@@ -3,6 +3,7 @@ package command;
 import java.util.LinkedList;
 
 import exception.IncorrectConversionException;
+import exception.InterpreterException;
 import AST.Data;
 import AST.Node;
 import AST.Variable;
@@ -24,9 +25,7 @@ public class Minus extends Command {
 
 	@Override
 	public void execute(Node node, Data data)
-			throws VariableAlreadyExistException, IncorrectConversionException,
-			IncorrectMethodCallException, InexistantVariableException,
-			VariableNotDeclaredException {
+			throws InterpreterException, InterruptedException {
 		LinkedList<Node> childs = node.getChilds();
 		Node node1 = childs.get(0);
 		Node node2 = childs.get(1);

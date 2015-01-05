@@ -9,8 +9,12 @@ let var1 in
 		if ide 
 		then
 			var1 := var1 + 2;
+			print "Value var 1 fils: ";
+			print var1;
 		else
 			var1 := var1+3;
+			print "Value var 1 pere: ";
+			print var1;
 		end
 	else
 		let finish in

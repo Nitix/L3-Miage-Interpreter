@@ -2,6 +2,11 @@ package exception;
 
 public class InterpreterException extends Exception{
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 681885188024846011L;
+
 	private int lineNumber = 0;
 
 	private String command = "";

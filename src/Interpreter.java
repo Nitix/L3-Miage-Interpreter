@@ -6,14 +6,14 @@ import command.InexistantVariableException;
 import command.VariableAlreadyExistException;
 import command.VariableNotDeclaredException;
 import exception.IncorrectConversionException;
+import exception.InterpreterException;
 import parser.Parser;
-import parser.ParserException;
 import parser.SyntaxErrorException;
 import parser.UnexceptedEndOfFileException;
 
 public class Interpreter {
 
-	public static void main(String[] args) {
+	public static void main(String[] args)  {
 		try {
 			Parser p = new Parser("test.ji");
 			p.parse();
@@ -22,6 +22,9 @@ public class Interpreter {
 			} catch (VariableAlreadyExistException
 					| IncorrectMethodCallException
 					| InexistantVariableException e) {
+				System.out.println("Execution Error : Ligne " + e.getLineNumber() + ", command : " + e.getCommand());
+				e.printStackTrace();
+			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
@@ -40,6 +43,8 @@ public class Interpreter {
 			e.printStackTrace();
 		} catch (UnexceptedEndOfFileException e) {
 			System.out.println("End of file unexpected : Ligne " + e.getLineNumber() + ", command : " + e.getCommand());
+			e.printStackTrace();
+		} catch (InterpreterException e){
 			e.printStackTrace();
 		}
 	}

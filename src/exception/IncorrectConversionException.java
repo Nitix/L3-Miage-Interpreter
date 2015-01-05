@@ -1,18 +1,18 @@
 package exception;
 
-import parser.ParserException;
-
-
 public class IncorrectConversionException extends InterpreterException {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 56780275321844127L;
 
 	public IncorrectConversionException(int line, String command, String message) {
 		super(line, command, message);
-		// TODO Auto-generated constructor stub
 	}
 
 	public IncorrectConversionException(int line, String command) {
 		super(line, command);
-		// TODO Auto-generated constructor stub
 	}
 
 }

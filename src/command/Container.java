@@ -2,7 +2,7 @@ package command;
 
 import java.util.LinkedList;
 
-import exception.IncorrectConversionException;
+import exception.InterpreterException;
 import AST.Data;
 import AST.Node;
 
@@ -26,9 +26,7 @@ public class Container extends Command {
 
 	@Override
 	public void execute(Node node, Data data)
-			throws VariableAlreadyExistException, IncorrectConversionException,
-			IncorrectMethodCallException, InexistantVariableException,
-			VariableNotDeclaredException {
+			throws InterpreterException, InterruptedException {
 		LinkedList<Node> childs = node.getChilds();
 		for (Node child : childs) {
 			child.execute(data);
@@ -38,14 +36,12 @@ public class Container extends Command {
 	
 	@Override
 	public void executeAtChilds(Node node, Data data, Node child)
-			throws VariableAlreadyExistException, IncorrectConversionException,
-			IncorrectMethodCallException, InexistantVariableException,
-			VariableNotDeclaredException {
+			throws InterpreterException, InterruptedException {
 		LinkedList<Node> childs = node.getChilds();
 		int index = childs.indexOf(child);
 		child.getCommand().partialExecute(child, data);
 		for(int i = index+1; i < childs.size(); i++){
-			child = childs.get(index);
+			child = childs.get(i);
 			child.execute(data);
 			child.removeVariable(data);
 		}

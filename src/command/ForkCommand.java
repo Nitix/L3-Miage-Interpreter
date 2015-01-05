@@ -2,7 +2,7 @@ package command;
 
 import java.util.UUID;
 
-import exception.IncorrectConversionException;
+import exception.InterpreterException;
 import AST.Data;
 import AST.Fork;
 import AST.Node;
@@ -21,14 +21,13 @@ public class ForkCommand extends Command {
 
 	@Override
 	public void execute(Node node, Data data)
-			throws VariableAlreadyExistException, IncorrectConversionException,
-			IncorrectMethodCallException, InexistantVariableException,
-			VariableNotDeclaredException {
+			throws InterpreterException, InterruptedException {
 		Variable var = new Variable();
 		var.setFork(null, null);
 		data.addVariable(getUuid(), var);
 		Data duplicate = data.deepClone();
 		Fork fork = new Fork(node.getFather(), duplicate);
+		fork.start();
 		var.setFork(fork, UUID.randomUUID().toString());
 	}
 

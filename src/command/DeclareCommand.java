@@ -1,6 +1,6 @@
 package command;
 
-import exception.IncorrectConversionException;
+import exception.InterpreterException;
 import AST.Data;
 import AST.Node;
 
@@ -20,9 +20,7 @@ public class DeclareCommand extends Command {
 
 	@Override
 	public void execute(Node node, Data data)
-			throws VariableAlreadyExistException, IncorrectConversionException,
-			IncorrectMethodCallException, InexistantVariableException,
-			VariableNotDeclaredException {
+			throws InterpreterException, InterruptedException {
 		data.declareVariable(nameVariable,this.getLine());
 		node.getChilds().get(0).execute(data);
 		node.getChilds().get(0).removeVariable(data);

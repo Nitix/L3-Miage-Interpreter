@@ -1,11 +1,7 @@
 package AST;
 
-import command.IncorrectMethodCallException;
-import command.InexistantVariableException;
 import command.Root;
-import command.VariableAlreadyExistException;
-import command.VariableNotDeclaredException;
-import exception.IncorrectConversionException;
+import exception.InterpreterException;
 
 public class AST {
 
@@ -19,7 +15,7 @@ public class AST {
 		return this.racine;
 	}
 
-	public void execute() throws IncorrectConversionException, VariableNotDeclaredException, VariableAlreadyExistException, IncorrectMethodCallException, InexistantVariableException {
+	public void execute() throws InterpreterException, InterruptedException {
 		this.racine.execute(new Data());
 	}
 }

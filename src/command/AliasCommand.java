@@ -1,6 +1,6 @@
 package command;
 
-import exception.IncorrectConversionException;
+import exception.InterpreterException;
 import AST.Data;
 import AST.Node;
 import AST.Variable;
@@ -23,9 +23,7 @@ public class AliasCommand extends Command {
 
 	@Override
 	public void execute(Node node, Data data)
-			throws VariableAlreadyExistException, IncorrectConversionException,
-			IncorrectMethodCallException, InexistantVariableException,
-			VariableNotDeclaredException {
+			throws InterpreterException, InterruptedException {
 		if (!data.isDeclaredVariable(ori))
 			throw new InexistantVariableException(this.getLine(), this.getCommand());
 		Variable var = new Variable();

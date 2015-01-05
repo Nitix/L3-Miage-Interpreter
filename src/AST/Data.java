@@ -9,7 +9,12 @@ import command.VariableAlreadyExistException;
 
 public class Data implements Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -6729835640691409304L;
 	private HashMap<String, Variable> variables = new HashMap<>();
+	private boolean isTerminated = false;
 
 	public boolean isDeclaredVariable(String command) {
 		return this.variables.containsKey(command);
@@ -45,6 +50,14 @@ public class Data implements Serializable {
 		if (!this.variables.containsKey(nameVariable))
 			throw new InexistantVariableException(line, nameVariable);
 		return this.variables.get(nameVariable);
+	}
+
+	public boolean isTerminated() {
+		return isTerminated;
+	}
+
+	public void setTerminated(boolean terminated) {
+		this.isTerminated = terminated;
 	}
 
 }

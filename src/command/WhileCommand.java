@@ -3,6 +3,7 @@ package command;
 import java.util.LinkedList;
 
 import exception.IncorrectConversionException;
+import exception.InterpreterException;
 import AST.Data;
 import AST.Node;
 
@@ -19,9 +20,7 @@ public class WhileCommand extends Command {
 
 	@Override
 	public void execute(Node node, Data data)
-			throws VariableAlreadyExistException, IncorrectConversionException,
-			IncorrectMethodCallException, InexistantVariableException,
-			VariableNotDeclaredException {
+			throws InterpreterException, InterruptedException {
 		LinkedList<Node> childs = node.getChilds();
 		Command exp = childs.get(0).getCommand();
 		exp.execute(childs.get(0), data);

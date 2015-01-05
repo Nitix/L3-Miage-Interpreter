@@ -65,11 +65,27 @@ public class Parser {
 			this.readLetcommand(node);
 		} else if (command.equalsIgnoreCase("exit")) {
 			this.isFinish = true;
+		} else if (command.equalsIgnoreCase("print")) {
+			this.readPrintCommand(node);
+		} else if (command.equalsIgnoreCase("return")){
+			node.add(new Node(new ReturnCommand(line), node));
 		} else {
 			if (Utils.isCommand(command))
 				throw new SyntaxErrorException(this.line, command);
 			this.readAffectionCommand(command, node);
 		}
+	}
+
+	private void readPrintCommand(Node node) throws UnexceptedEndOfFileException, IOException, SyntaxErrorException {
+		String command = readCommandName();
+
+		if(Utils.isCommand(command)){
+			throw new SyntaxErrorException(line, command, "Text or Variable or Value expected");
+		}
+		node.add(new Node(new PrintCommand(line, command, command.startsWith("\"")), node));
+		command = this.readCommandName();
+		if (!command.equalsIgnoreCase(";"))
+			throw new SyntaxErrorException(this.line, command, "; expected");
 	}
 
 	private void readAffectionCommand(String var, Node node)
@@ -84,8 +100,15 @@ public class Parser {
 
 		command = this.readCommandName();
 		if (command.equalsIgnoreCase("fork()")) {
-			Node n = new Node(new ForkCommand(line), assign);
-			assign.add(n);
+			assign.add(new Node(new ForkCommand(line), assign));
+		} else if(command.equalsIgnoreCase("wait(")){
+			command = this.readCommandName();
+			if(Utils.isCommand(command))
+				throw new SyntaxErrorException(line, command, "Fork variable expected");
+			assign.add(new Node(new WaitCommand(command, line), assign));
+			command = this.readCommandName();
+			if(!command.equals(")"))
+				throw new SyntaxErrorException(line, command, ") expected");
 		} else {
 			this.unReadCommand = command;
 			this.readExpression(assign);
@@ -144,29 +167,70 @@ public class Parser {
 		if (charac == -1)
 			throw new UnexceptedEndOfFileException(line, command);
 
-		boolean ok = false;
-		boolean isUniqueChar = true;
-		while (charac != -1 && !ok) {
-			if (this.isEmptyChar(charac)) {
-				reader.unread(charac);
-				ok = true;
-			} else {
-				if (this.isUniqueCharCommand(charac)) {
-					if (isUniqueChar) {
+		if(charac == '"'){
+			boolean ignoreChar = true;
+			while (charac != -1) {
+				if(charac == '\\')
+					ignoreChar = true;
+				if(charac == '"'){
+					if(ignoreChar){
+						ignoreChar = false;
+					}else{
 						command += (char) charac;
-						ok = true;
-					} else {
-						reader.unread(charac);
-						ok = true;
+						break;
 					}
-				} else {
-					command += (char) charac;
-					charac = reader.read();
 				}
-				isUniqueChar = false;
+				command += (char) charac;
+				charac = reader.read();
+			}
+			if(charac == -1)
+				throw new UnexceptedEndOfFileException(line, command);
+		}else{
+			boolean ok = false;
+			boolean isUniqueChar = true;
+			boolean isparenthesis = false;
+			while (charac != -1 && !ok) {
+				if (this.isEmptyChar(charac)) {
+					reader.unread(charac);
+					ok = true;
+				} else {
+					if (this.isUniqueCharCommand(charac)) {
+						if (isUniqueChar) {
+							command += (char) charac;
+							ok = true;
+						} else {
+							reader.unread(charac);
+							ok = true;
+						}
+					} else {
+						if(isparenthesis && charac != ')'){
+							reader.unread(charac);
+							ok = true;
+						}else{
+							if(charac == '('){
+								isparenthesis = true;
+								command += (char) charac;
+								charac = reader.read();
+							}else if(charac == ')'){
+								if(!isparenthesis){
+									reader.unread(charac);
+									ok = true;
+								}else{
+									command += (char) charac;
+									ok = true;
+								}
+							}else{
+								command += (char) charac;
+								charac = reader.read();
+							}
+						}
+					}
+					isUniqueChar = false;
+				}
 			}
 		}
 		return command;
+
 	}
 
 	private void readIfCommand(Node node) throws IOException,
@@ -282,12 +346,6 @@ public class Parser {
 		return c == ';' || c == '*' || c == '/' || c == '+' || c == '-';
 	}
 
-	/*
-	 * private boolean isNewLine(int c){ urn }
-	 */
-	private boolean isEndCommandChar(int charac) {
-		return charac == ';';
-	}
 
 	public static boolean isInteger(String str) {
 		if (str == null) {

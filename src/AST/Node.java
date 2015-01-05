@@ -3,11 +3,7 @@ package AST;
 import java.util.LinkedList;
 
 import command.Command;
-import command.IncorrectMethodCallException;
-import command.InexistantVariableException;
-import command.VariableAlreadyExistException;
-import command.VariableNotDeclaredException;
-import exception.IncorrectConversionException;
+import exception.InterpreterException;
 
 public class Node {
 
@@ -56,9 +52,7 @@ public class Node {
 		return childs;
 	}
 
-	public void execute(Data data) throws VariableAlreadyExistException,
-			IncorrectConversionException, IncorrectMethodCallException,
-			InexistantVariableException, VariableNotDeclaredException {
+	public void execute(Data data) throws InterpreterException, InterruptedException {
 		this.command.execute(this, data);
 	}
 

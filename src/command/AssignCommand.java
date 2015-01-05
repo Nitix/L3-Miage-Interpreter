@@ -1,7 +1,9 @@
 package command;
 
 import exception.IncorrectConversionException;
+import exception.InterpreterException;
 import AST.Data;
+import AST.Fork;
 import AST.Node;
 import AST.Variable;
 
@@ -21,9 +23,7 @@ public class AssignCommand extends Command {
 
 	@Override
 	public void execute(Node node, Data data)
-			throws VariableAlreadyExistException, IncorrectConversionException,
-			IncorrectMethodCallException, InexistantVariableException,
-			VariableNotDeclaredException {
+			throws InterruptedException, InterpreterException {
 		Node value = node.getChilds().get(0);
 		value.execute(data);
 		Command valueCommand = value.getCommand();
@@ -45,15 +45,17 @@ public class AssignCommand extends Command {
 	
 	@Override 
 	public void partialExecute(Node node, Data data) //Called from fork
-			throws VariableAlreadyExistException, IncorrectConversionException,
+			throws InterpreterException,
 			IncorrectMethodCallException, InexistantVariableException,
-			VariableNotDeclaredException {
+			VariableNotDeclaredException, InterruptedException {
 		Node value = node.getChilds().get(0);
 		Command valueCommand = value.getCommand();
 		Variable var = new Variable();
 		if(!valueCommand.isFork(data)){
-			var.setFork(valueCommand.getFork(data), valueCommand.getForkName(data));
+			throw new IncorrectMethodCallException(getLine(), getCommand());
 		}
+		var.setFork(valueCommand.getFork(data), valueCommand.getForkName(data));
+		data.addVariable(nameVariable, var);
 		value.removeVariable(data);
 
 	}
