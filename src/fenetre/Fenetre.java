@@ -51,6 +51,8 @@ public class Fenetre extends Application {
 		validatecommand.setText("Execute.");
 		Button chooser = new Button();
 		chooser.setText("Open a File.");
+		Button sauvegarde = new Button();
+		sauvegarde.setText("Sauvegarder votre commande");
 		Label title = new Label("Commande : ");
 		Label titleChooser = new Label("Choisir une file :");
 		Label response = new Label("Réponse : ");
@@ -74,8 +76,13 @@ public class Fenetre extends Application {
 									// TODO
 								}
 							});
+					sauvegarde.setOnAction(new EventHandler<ActionEvent>() {
+						public void handle(ActionEvent event) {
+							// TODO
+						}
+					});
 					vbox.getChildren().addAll(title, manualcommand,
-							validatecommand, response, responsecommand);
+							validatecommand, response, responsecommand, sauvegarde);
 				}
 				vbox.setVisible(true);
 			}
