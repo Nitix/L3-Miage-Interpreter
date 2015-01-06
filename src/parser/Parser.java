@@ -1,5 +1,6 @@
 package parser;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -16,12 +17,14 @@ public class Parser {
 
 	private PushbackReader reader;
 
-	public AST ast = new AST(); // FIXME DEBUG ONLY
+	private AST ast = new AST(); 
 	private String unReadCommand = null;
 
 	private boolean isLoop = false;
 	private boolean isFinish = false;
-
+	
+	private boolean completeAST = false;
+	
 	private int line = 1;
 
 	public Parser() {
@@ -35,6 +38,31 @@ public class Parser {
 	public Parser(File file) throws FileNotFoundException {
 		this.reader = new PushbackReader(new FileReader(file));
 	}
+	
+	public AST getAST(){
+		ast.setLine(line);
+		return this.ast;
+	}
+	
+	public void close() throws IOException{
+		this.reader.close();
+	}
+	
+	public boolean isCompleteAST(){
+		return completeAST;
+	}
+	
+	public void parse(String string) throws IOException, SyntaxErrorException,
+		VariableNotDeclaredException, IncorrectConversionException {
+		this.reader.close();
+		this.reader = new PushbackReader(new InputStreamReader(new ByteArrayInputStream(string.getBytes())));
+		try{
+			parse();
+		}catch(UnexceptedEndOfFileException e){
+		}
+		if(!this.isFinish)
+			this.completeAST = false;
+	}
 
 	public void parse() throws IOException, SyntaxErrorException,
 			VariableNotDeclaredException, IncorrectConversionException,
@@ -43,6 +71,7 @@ public class Parser {
 		while (!this.isEndOfFile() && !this.isFinish) {
 			this.readCommand(racine);
 		}
+		this.completeAST = true;
 	}
 
 	private void readCommand(Node node) throws IOException,
@@ -607,5 +636,10 @@ public class Parser {
 			unReadCommand = command;
 			return Utils.isSystemCommand(command);
 		}
+	}
+
+	public void setAST(AST ast) {
+		this.ast = ast;
+		this.line = ast.getLine();
 	}
 }

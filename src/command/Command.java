@@ -1,5 +1,6 @@
 package command;
 
+import java.io.Serializable;
 import java.util.UUID;
 
 import exception.IncorrectConversionException;
@@ -8,7 +9,12 @@ import AST.Data;
 import AST.Fork;
 import AST.Node;
 
-public abstract class Command {
+public abstract class Command implements Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -4326199918997155358L;
 
 	private String uuid;
 	

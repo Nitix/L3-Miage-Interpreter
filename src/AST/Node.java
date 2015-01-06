@@ -1,11 +1,17 @@
 package AST;
 
+import java.io.Serializable;
 import java.util.LinkedList;
 
 import command.Command;
 import exception.InterpreterException;
 
-public class Node {
+public class Node implements Serializable{
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 2772430925810320091L;
 
 	private LinkedList<Node> childs = new LinkedList<>();
 
