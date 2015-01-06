@@ -23,7 +23,6 @@ public class Parser {
 	private boolean isLoop = false;
 	private boolean isFinish = false;
 	
-	private boolean completeAST = false;
 	
 	private int line = 1;
 
@@ -48,9 +47,6 @@ public class Parser {
 		this.reader.close();
 	}
 	
-	public boolean isCompleteAST(){
-		return completeAST;
-	}
 	
 	public void parse(String string) throws IOException, SyntaxErrorException,
 		VariableNotDeclaredException, IncorrectConversionException {
@@ -60,8 +56,6 @@ public class Parser {
 			parse();
 		}catch(UnexceptedEndOfFileException e){
 		}
-		if(!this.isFinish)
-			this.completeAST = false;
 	}
 
 	public void parse() throws IOException, SyntaxErrorException,
@@ -71,7 +65,6 @@ public class Parser {
 		while (!this.isEndOfFile() && !this.isFinish) {
 			this.readCommand(racine);
 		}
-		this.completeAST = true;
 	}
 
 	private void readCommand(Node node) throws IOException,

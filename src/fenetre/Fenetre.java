@@ -136,42 +136,39 @@ public class Fenetre extends Application {
 		});
 		executecommand.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent event) {
-					if(parser.isCompleteAST()){
-						try{
-							parser.getAST().execute();
-						} catch (VariableAlreadyExistException e) {
-							System.out.println("Ne peut pas redeclarer la variable : Ligne " + e.getLineNumber() + ", commande : " + e.getCommand());
-							System.out.println(e.getMessage());
-						} catch (IncorrectMethodCallException e) {
-							System.out.println("Appel de méthode incorrect : Ligne " + e.getLineNumber() + ", commande : " + e.getCommand());
-							System.out.println(e.getMessage());
-						} catch (InexistantVariableException e) {
-							System.out.println("Variable non existante : Ligne " + e.getLineNumber() + ", commande : " + e.getCommand());
-							System.out.println(e.getMessage());
-							e.printStackTrace();
-						} catch (InterruptedException e) {
-							System.out.println("Exception d'interruption");		
-							System.out.println(e.getMessage());
-						} catch (SyntaxErrorException e) {
-							System.out.println("Erreur syntaxique : Ligne " + e.getLineNumber() + ", commande : " + e.getCommand());
-							System.out.println(e.getMessage());
-							e.printStackTrace();
-						} catch (VariableNotDeclaredException e) {
-							System.out.println("Variable non déclaré : Ligne " + e.getLineNumber() + ", commande : " + e.getCommand());
-							System.out.println(e.getMessage());
-							e.printStackTrace();
-						} catch (IncorrectConversionException e) {
-							System.out.println("Conversion incorret : Ligne " + e.getLineNumber() + ", commande : " + e.getCommand());
-							System.out.println(e.getMessage());
-							e.printStackTrace();
-						} catch (InterpreterException e){
-							System.out.println("Erreur d'éxecution : Ligne " + e.getLineNumber() + ", commande : " + e.getCommand());
-							System.out.println(e.getMessage());
-							e.printStackTrace();
-						}
-					}else{
-						System.out.println("AST non complet");
+					try{
+						parser.getAST().execute();
+					} catch (VariableAlreadyExistException e) {
+						System.out.println("Ne peut pas redeclarer la variable : Ligne " + e.getLineNumber() + ", commande : " + e.getCommand());
+						System.out.println(e.getMessage());
+					} catch (IncorrectMethodCallException e) {
+						System.out.println("Appel de méthode incorrect : Ligne " + e.getLineNumber() + ", commande : " + e.getCommand());
+						System.out.println(e.getMessage());
+					} catch (InexistantVariableException e) {
+						System.out.println("Variable non existante : Ligne " + e.getLineNumber() + ", commande : " + e.getCommand());
+						System.out.println(e.getMessage());
+						e.printStackTrace();
+					} catch (InterruptedException e) {
+						System.out.println("Exception d'interruption");		
+						System.out.println(e.getMessage());
+					} catch (SyntaxErrorException e) {
+						System.out.println("Erreur syntaxique : Ligne " + e.getLineNumber() + ", commande : " + e.getCommand());
+						System.out.println(e.getMessage());
+						e.printStackTrace();
+					} catch (VariableNotDeclaredException e) {
+						System.out.println("Variable non déclaré : Ligne " + e.getLineNumber() + ", commande : " + e.getCommand());
+						System.out.println(e.getMessage());
+						e.printStackTrace();
+					} catch (IncorrectConversionException e) {
+						System.out.println("Conversion incorret : Ligne " + e.getLineNumber() + ", commande : " + e.getCommand());
+						System.out.println(e.getMessage());
+						e.printStackTrace();
+					} catch (InterpreterException e){
+						System.out.println("Erreur d'éxecution : Ligne " + e.getLineNumber() + ", commande : " + e.getCommand());
+						System.out.println(e.getMessage());
+						e.printStackTrace();
 					}
+			
 				}
 		});
 		sauvegarde.setOnAction(new EventHandler<ActionEvent>() {
