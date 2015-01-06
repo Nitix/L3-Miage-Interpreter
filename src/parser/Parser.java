@@ -23,6 +23,7 @@ public class Parser {
 	private boolean isLoop = false;
 	private boolean isFinish = false;
 	
+	private boolean isComplete = false;
 	
 	private int line = 1;
 
@@ -41,6 +42,10 @@ public class Parser {
 	public AST getAST(){
 		ast.setLine(line);
 		return this.ast;
+	}
+	
+	public boolean isComplete() {
+		return isComplete;
 	}
 	
 	public void close() throws IOException{
@@ -63,8 +68,10 @@ public class Parser {
 			UnexceptedEndOfFileException {
 		Node racine = this.ast.getRacine();
 		while (!this.isEndOfFile() && !this.isFinish) {
+			isComplete = false;
 			this.readCommand(racine);
 		}
+		isComplete = true;
 	}
 
 	private void readCommand(Node node) throws IOException,

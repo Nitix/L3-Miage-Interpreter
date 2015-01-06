@@ -136,6 +136,7 @@ public class Fenetre extends Application {
 		});
 		executecommand.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent event) {
+				if(parser.isComplete()){
 					try{
 						parser.getAST().execute();
 					} catch (VariableAlreadyExistException e) {
@@ -169,7 +170,10 @@ public class Fenetre extends Application {
 						e.printStackTrace();
 					}
 			
+				}else{
+					System.out.println("AST non complet");
 				}
+			}
 		});
 		sauvegarde.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent event) {
