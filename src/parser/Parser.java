@@ -60,6 +60,7 @@ public class Parser {
 		try{
 			parse();
 		}catch(UnexceptedEndOfFileException e){
+			e.printStackTrace();
 		}
 	}
 
@@ -192,6 +193,7 @@ public class Parser {
 		}
 		this.ignoreSpace();
 		int charac = reader.read();
+
 		String command = "";
 		if (charac == -1)
 			throw new UnexceptedEndOfFileException(line, command);
@@ -347,11 +349,9 @@ public class Parser {
 			if (this.isEmptyChar(charac)) {
 				if (charac == '\n' || charac == '\r') {
 					this.line++;
-					int c = reader.read();
+					charac = reader.read();
 					if (charac == '\n' || charac == '\r') {
 						charac = reader.read();
-					} else {
-						charac = c;
 					}
 				} else {
 					charac = reader.read();
