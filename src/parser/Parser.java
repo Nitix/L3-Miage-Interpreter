@@ -8,10 +8,10 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PushbackReader;
 
+import ast2.AST;
+import ast2.Node;
 import command.*;
 import exception.IncorrectConversionException;
-import AST.AST;
-import AST.Node;
 
 public class Parser {
 

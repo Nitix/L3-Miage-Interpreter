@@ -2,12 +2,12 @@ package command;
 
 import java.util.LinkedList;
 
+import ast2.Data;
+import ast2.Node;
+import ast2.variable.IntVariable;
+import ast2.variable.Variable;
 import exception.IncorrectConversionException;
 import exception.InterpreterException;
-import AST.Data;
-import AST.Node;
-import AST.variable.IntVariable;
-import AST.variable.Variable;
 
 public class Times extends Command {
 

@@ -1,7 +1,7 @@
-package AST.variable;
+package ast2.variable;
 
+import ast2.Fork;
 import command.IncorrectMethodCallException;
-import AST.Fork;
 
 public abstract class Variable {
 

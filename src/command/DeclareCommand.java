@@ -1,8 +1,8 @@
 package command;
 
+import ast2.Data;
+import ast2.Node;
 import exception.InterpreterException;
-import AST.Data;
-import AST.Node;
 
 public class DeclareCommand extends Command {
 

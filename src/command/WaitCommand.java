@@ -1,10 +1,10 @@
 package command;
 
-import AST.Data;
-import AST.Fork;
-import AST.Node;
-import AST.variable.IntVariable;
-import AST.variable.Variable;
+import ast2.Data;
+import ast2.Fork;
+import ast2.Node;
+import ast2.variable.IntVariable;
+import ast2.variable.Variable;
 import exception.InterpreterException;
 
 public class WaitCommand extends Command {

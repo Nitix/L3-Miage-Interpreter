@@ -1,8 +1,8 @@
 package command;
 
-import AST.Data;
-import AST.Node;
-import AST.variable.Variable;
+import ast2.Data;
+import ast2.Node;
+import ast2.variable.Variable;
 import exception.InterpreterException;
 
 public class PrintCommand extends Command {

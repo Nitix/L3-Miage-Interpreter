@@ -1,6 +1,6 @@
-package AST.variable;
+package ast2.variable;
 
-import AST.Fork;
+import ast2.Fork;
 import command.IncorrectMethodCallException;
 
 public class AliasVariable extends Variable{

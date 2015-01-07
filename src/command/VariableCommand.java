@@ -1,10 +1,10 @@
 package command;
 
+import ast2.Data;
+import ast2.Fork;
+import ast2.Node;
+import ast2.variable.Variable;
 import exception.InterpreterException;
-import AST.Data;
-import AST.Fork;
-import AST.Node;
-import AST.variable.Variable;
 
 public class VariableCommand extends Command {
 

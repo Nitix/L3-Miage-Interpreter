@@ -1,4 +1,4 @@
-package AST;
+package ast2;
 
 import exception.InterpreterException;
 

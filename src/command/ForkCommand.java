@@ -2,12 +2,12 @@ package command;
 
 import java.util.UUID;
 
+import ast2.Data;
+import ast2.Fork;
+import ast2.Node;
+import ast2.variable.ForkVariable;
+import ast2.variable.Variable;
 import exception.InterpreterException;
-import AST.Data;
-import AST.Fork;
-import AST.Node;
-import AST.variable.ForkVariable;
-import AST.variable.Variable;
 
 public class ForkCommand extends Command {	
 

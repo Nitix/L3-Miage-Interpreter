@@ -1,13 +1,13 @@
 package command;
 
+import ast2.Data;
+import ast2.Node;
+import ast2.variable.BooleanVariable;
+import ast2.variable.ForkVariable;
+import ast2.variable.IntVariable;
+import ast2.variable.Variable;
 import exception.IncorrectConversionException;
 import exception.InterpreterException;
-import AST.Data;
-import AST.Node;
-import AST.variable.BooleanVariable;
-import AST.variable.ForkVariable;
-import AST.variable.IntVariable;
-import AST.variable.Variable;
 
 public class AssignCommand extends Command {
 

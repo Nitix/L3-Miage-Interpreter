@@ -1,6 +1,6 @@
-package AST.variable;
+package ast2.variable;
 
-import AST.Fork;
+import ast2.Fork;
 
 public class EmptyVariable extends Variable {
 

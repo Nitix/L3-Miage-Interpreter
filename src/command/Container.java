@@ -2,9 +2,9 @@ package command;
 
 import java.util.LinkedList;
 
+import ast2.Data;
+import ast2.Node;
 import exception.InterpreterException;
-import AST.Data;
-import AST.Node;
 
 /**
  * This class contains only orther commands They are usefull for : <br>
