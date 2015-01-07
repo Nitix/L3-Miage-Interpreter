@@ -1,11 +1,11 @@
 package command;
 
-import ast2.Data;
-import ast2.Node;
-import ast2.variable.BooleanVariable;
-import ast2.variable.ForkVariable;
-import ast2.variable.IntVariable;
-import ast2.variable.Variable;
+import ast.Data;
+import ast.Node;
+import ast.variable.BooleanVariable;
+import ast.variable.ForkVariable;
+import ast.variable.IntVariable;
+import ast.variable.Variable;
 import exception.IncorrectConversionException;
 import exception.InterpreterException;
 

@@ -1,11 +1,11 @@
-package ast2;
+package ast;
 
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Set;
 
-import ast2.variable.EmptyVariable;
-import ast2.variable.Variable;
+import ast.variable.EmptyVariable;
+import ast.variable.Variable;
 import command.InexistantVariableException;
 import command.VariableAlreadyExistException;
 

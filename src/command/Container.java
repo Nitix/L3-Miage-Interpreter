@@ -2,8 +2,8 @@ package command;
 
 import java.util.LinkedList;
 
-import ast2.Data;
-import ast2.Node;
+import ast.Data;
+import ast.Node;
 import exception.InterpreterException;
 
 /**

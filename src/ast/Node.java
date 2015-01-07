@@ -1,4 +1,4 @@
-package ast2;
+package ast;
 
 import java.io.Serializable;
 import java.util.LinkedList;

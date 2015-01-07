@@ -1,7 +1,7 @@
 package command;
 
-import ast2.Data;
-import ast2.Node;
+import ast.Data;
+import ast.Node;
 import exception.InterpreterException;
 
 public class ReturnCommand extends Command {

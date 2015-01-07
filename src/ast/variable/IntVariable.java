@@ -1,6 +1,6 @@
-package ast2.variable;
+package ast.variable;
 
-import ast2.Fork;
+import ast.Fork;
 import command.IncorrectMethodCallException;
 
 

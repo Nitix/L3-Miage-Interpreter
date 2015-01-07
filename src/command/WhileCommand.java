@@ -2,9 +2,9 @@ package command;
 
 import java.util.LinkedList;
 
-import ast2.Data;
-import ast2.Node;
-import ast2.variable.Variable;
+import ast.Data;
+import ast.Node;
+import ast.variable.Variable;
 import exception.IncorrectConversionException;
 import exception.InterpreterException;
 
