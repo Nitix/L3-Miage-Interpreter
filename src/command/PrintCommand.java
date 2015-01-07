@@ -2,11 +2,15 @@ package command;
 
 import AST.Data;
 import AST.Node;
-import AST.Variable;
+import AST.variable.Variable;
 import exception.InterpreterException;
 
 public class PrintCommand extends Command {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -3017889076037915767L;
 	private boolean isString;
 
 	public PrintCommand(int line, String command, boolean isString) {

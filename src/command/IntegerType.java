@@ -6,6 +6,11 @@ import AST.Node;
 
 public class IntegerType extends Command {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -39506532777110614L;
+
 	@Override
 	public String toString() {
 		return "IntegerType [value=" + value + "]";

@@ -3,11 +3,16 @@ package command;
 import AST.Data;
 import AST.Fork;
 import AST.Node;
-import AST.Variable;
+import AST.variable.IntVariable;
+import AST.variable.Variable;
 import exception.InterpreterException;
 
 public class WaitCommand extends Command {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -553468386406316823L;
 	private String forkName;
 
 	public WaitCommand(String forkName, int line) {
@@ -27,7 +32,7 @@ public class WaitCommand extends Command {
 			throw new IncorrectMethodCallException(this.getIntValue(data), "wait()", "Fork variable is empty");
 		}
 		fork.join();
-		Variable var = new Variable();
+		Variable var = new IntVariable();
 
 		if(fork.hasException()){
 			var.setIntValue(-1);

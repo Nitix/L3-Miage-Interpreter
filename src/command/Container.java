@@ -15,6 +15,11 @@ import AST.Node;
  */
 public class Container extends Command {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 509430560902825564L;
+
 	public Container(int line, String command) {
 		super(line, command);
 	}

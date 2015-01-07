@@ -6,9 +6,15 @@ import exception.IncorrectConversionException;
 import exception.InterpreterException;
 import AST.Data;
 import AST.Node;
-import AST.Variable;
+import AST.variable.BooleanVariable;
+import AST.variable.Variable;
 
 public class EqualComparatorCommand extends Command {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1095959937114205310L;
 
 	public EqualComparatorCommand(int line) {
 		super(line, "=");
@@ -30,20 +36,19 @@ public class EqualComparatorCommand extends Command {
 		command1.execute(node1, data);
 		command2.execute(node2, data);
 
-		Variable var = new Variable();
-
+		Variable var;
 		if (command1.hasBooleanValue(data)) {
 			if (!command2.hasBooleanValue(data)) {
 				throw new IncorrectConversionException(this.getLine(), this.getCommand());
 			}
-			var.setBooleanValue(command1.getBooleanValue(data) == command2
+			var = new BooleanVariable(command1.getBooleanValue(data) == command2
 					.getBooleanValue(data));
 		} else {
 			if (command1.hasIntValue(data)) {
 				if (!command2.hasIntValue(data)) {
 					throw new IncorrectConversionException(this.getLine(), this.getCommand());
 				}
-				var.setBooleanValue(command1.getIntValue(data) == command2
+				var = new BooleanVariable(command1.getIntValue(data) == command2
 						.getIntValue(data));
 			} else {
 				throw new IncorrectConversionException(this.getLine(), this.getCommand());

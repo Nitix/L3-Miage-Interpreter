@@ -3,12 +3,18 @@ package command;
 import exception.IncorrectConversionException;
 import exception.InterpreterException;
 import AST.Data;
-import AST.Fork;
 import AST.Node;
-import AST.Variable;
+import AST.variable.BooleanVariable;
+import AST.variable.ForkVariable;
+import AST.variable.IntVariable;
+import AST.variable.Variable;
 
 public class AssignCommand extends Command {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 390131133752547143L;
 	private String nameVariable;
 
 	public AssignCommand(String name, int line) {
@@ -27,15 +33,15 @@ public class AssignCommand extends Command {
 		Node value = node.getChilds().get(0);
 		value.execute(data);
 		Command valueCommand = value.getCommand();
-		Variable var = new Variable();
+		Variable var;
 		if(!valueCommand.hasValue(data))
 			throw new IncorrectMethodCallException(this.getLine(), this.getCommand());
 		if(valueCommand.hasIntValue(data)){
-			var.setIntValue(valueCommand.getIntValue(data));
+			var = new IntVariable(valueCommand.getIntValue(data));
 		}else if(valueCommand.hasBooleanValue(data)){
-			var.setBooleanValue(valueCommand.getBooleanValue(data));
+			var = new BooleanVariable(valueCommand.getBooleanValue(data));
 		}else if(valueCommand.isFork(data)){
-			var.setFork(valueCommand.getFork(data), valueCommand.getForkName(data));
+			var = new ForkVariable(valueCommand.getFork(data), valueCommand.getForkName(data));
 		}else{
 			throw new IncorrectConversionException(this.getLine(), this.getCommand());
 		}
@@ -50,11 +56,10 @@ public class AssignCommand extends Command {
 			VariableNotDeclaredException, InterruptedException {
 		Node value = node.getChilds().get(0);
 		Command valueCommand = value.getCommand();
-		Variable var = new Variable();
 		if(!valueCommand.isFork(data)){
 			throw new IncorrectMethodCallException(getLine(), getCommand());
 		}
-		var.setFork(valueCommand.getFork(data), valueCommand.getForkName(data));
+		Variable var = new ForkVariable(valueCommand.getFork(data), valueCommand.getForkName(data));
 		data.addVariable(nameVariable, var);
 		value.removeVariable(data);
 

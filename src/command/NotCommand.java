@@ -6,9 +6,15 @@ import exception.IncorrectConversionException;
 import exception.InterpreterException;
 import AST.Data;
 import AST.Node;
-import AST.Variable;
+import AST.variable.BooleanVariable;
+import AST.variable.Variable;
 
 public class NotCommand extends Command {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -1193426715782605872L;
 
 	public NotCommand(int line) {
 		super(line, "not");
@@ -27,11 +33,10 @@ public class NotCommand extends Command {
 		Command command1 = node1.getCommand();
 		command1.execute(node1, data);
 
-		Variable var = new Variable();
 		if (!command1.hasBooleanValue(data)) {
 			throw new IncorrectConversionException(this.getLine(), this.getCommand());
 		}
-		var.setBooleanValue(!command1.getBooleanValue(data));
+		Variable var = new BooleanVariable(!command1.getBooleanValue(data));
 
 		data.addVariable(this.getUuid(), var);
 	}

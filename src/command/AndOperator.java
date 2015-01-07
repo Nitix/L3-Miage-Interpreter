@@ -6,9 +6,15 @@ import exception.IncorrectConversionException;
 import exception.InterpreterException;
 import AST.Data;
 import AST.Node;
-import AST.Variable;
+import AST.variable.BooleanVariable;
+import AST.variable.Variable;
 
 public class AndOperator extends Command {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -3676786464624469922L;
 
 	public AndOperator(int line) {
 		super(line, "and");
@@ -35,7 +41,7 @@ public class AndOperator extends Command {
 		if (!command2.hasBooleanValue(data)) {
 			throw new IncorrectConversionException(this.getLine(), this.getCommand());
 		}
-		Variable var = new Variable();
+		Variable var = new BooleanVariable();
 		var.setBooleanValue(command1.getBooleanValue(data)
 				&& command2.getBooleanValue(data));
 		data.addVariable(this.getUuid(), var);

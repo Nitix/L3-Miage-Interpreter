@@ -6,6 +6,10 @@ import AST.Node;
 
 public class DeclareCommand extends Command {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -8126510234681380206L;
 	private String nameVariable;
 
 	public DeclareCommand(String name, int line) {

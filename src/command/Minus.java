@@ -6,9 +6,15 @@ import exception.IncorrectConversionException;
 import exception.InterpreterException;
 import AST.Data;
 import AST.Node;
-import AST.Variable;
+import AST.variable.IntVariable;
+import AST.variable.Variable;
 
 public class Minus extends Command {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 4758786039549709765L;
 
 	public Minus(int line) {
 		super(line, "-");
@@ -39,8 +45,7 @@ public class Minus extends Command {
 		if (!command2.hasIntValue(data)) {
 			throw new IncorrectConversionException(this.getLine(), this.getCommand());
 		}
-		Variable var = new Variable();
-		var.setIntValue(command1.getIntValue(data) + command2.getIntValue(data));
+		Variable var = new IntVariable(command1.getIntValue(data) + command2.getIntValue(data));
 		data.addVariable(this.getUuid(), var);
 	}
 

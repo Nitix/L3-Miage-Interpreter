@@ -7,6 +7,10 @@ import AST.Node;
 
 public class VariableCommand extends Command {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1141243422421491031L;
 	private String name;
 
 	@Override

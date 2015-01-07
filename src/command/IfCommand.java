@@ -9,6 +9,11 @@ import AST.Node;
 
 public class IfCommand extends Command {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -1401953064183147211L;
+
 	public IfCommand(int line) {
 		super(line, "if");
 	}

@@ -9,6 +9,11 @@ import AST.Node;
 
 public class WhileCommand extends Command {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 9207629406031221041L;
+
 	public WhileCommand(int line) {
 		super(line, "while");
 	}

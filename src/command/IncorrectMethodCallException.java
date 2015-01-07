@@ -18,4 +18,7 @@ public class IncorrectMethodCallException extends CommandException {
 		// TODO Auto-generated constructor stub
 	}
 
+	public IncorrectMethodCallException() {
+		super(-1, "");
+	}
 }

@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Set;
 
+import AST.variable.EmptyVariable;
+import AST.variable.Variable;
 import command.InexistantVariableException;
 import command.VariableAlreadyExistException;
 
@@ -24,7 +26,7 @@ public class Data implements Serializable {
 			throws VariableAlreadyExistException {
 		if (this.variables.containsKey(nameVariable))
 			throw new VariableAlreadyExistException(line, nameVariable);
-		Variable var = new Variable();
+		Variable var = new EmptyVariable();
 		this.addVariable(nameVariable, var);
 	}
 

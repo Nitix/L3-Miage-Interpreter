@@ -6,6 +6,10 @@ import AST.Node;
 
 public class BooleanType extends Command {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 6271398765651851129L;
 	private boolean value;
 
 	public BooleanType(boolean value, int line) {
