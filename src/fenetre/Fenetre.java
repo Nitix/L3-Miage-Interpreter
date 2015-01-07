@@ -69,7 +69,7 @@ public class Fenetre extends Application {
 		responsecommand.setEditable(false);
 		Button validatecommand = new Button("Ajouter à l'AST");
 		Button executecommand = new Button("Executer");
-		Button chooser = new Button("Open a File.");
+		Button chooser = new Button("Ouvrir un fichier");
 		Button sauvegarde = new Button("Sauvegarder votre AST");
 		Button restauration = new Button("Restaurer votre AST");
 
@@ -84,7 +84,7 @@ public class Fenetre extends Application {
 		
 		// Item of MenuBar :
 		// First Menu :
-		Label menuLabel = new Label("In Ligne Command");
+		Label menuLabel = new Label("Ligne de commande");
 		menuLabel.setOnMouseClicked(new EventHandler<MouseEvent>() {
 			public void handle(MouseEvent event) {
 				parser = new Parser();
@@ -174,7 +174,7 @@ public class Fenetre extends Application {
 		});
 		sauvegarde.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent event) {
-				fileChooser.setTitle("Save AST");
+				fileChooser.setTitle("Sauvegarder AST");
 				FileChooser.ExtensionFilter extFilter = 
 		                new FileChooser.ExtensionFilter("Java fork interpreter AST (*.ji.ast)", "*.ji.ast");
 				fileChooser.getExtensionFilters().add(extFilter);
@@ -241,7 +241,7 @@ public class Fenetre extends Application {
 		
 
 		// Second Menu :
-		Label menuLabel2 = new Label("Import File");
+		Label menuLabel2 = new Label("Execution à partir de fichier");
 		menuLabel2.setOnMouseClicked(new EventHandler<MouseEvent>() {
 			public void handle(MouseEvent event) {
 				if (vbox.getChildren().contains(manualcommand) || vbox.getChildren().contains(title)) {
@@ -256,7 +256,7 @@ public class Fenetre extends Application {
 		});
 		chooser.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent event) {
-				fileChooser.setTitle("Open Resource File");
+				fileChooser.setTitle("Ouvrir un fichier");
 				FileChooser.ExtensionFilter extFilter = 
 		                new FileChooser.ExtensionFilter("Java fork interpreter (*.ji)", "*.ji");
 				fileChooser.getExtensionFilters().add(extFilter);
