@@ -241,7 +241,7 @@ public class Fenetre extends Application {
 		
 
 		// Second Menu :
-		Label menuLabel2 = new Label("Execution à partir de fichier");
+		Label menuLabel2 = new Label("Exécution à partir de fichier");
 		menuLabel2.setOnMouseClicked(new EventHandler<MouseEvent>() {
 			public void handle(MouseEvent event) {
 				if (vbox.getChildren().contains(manualcommand) || vbox.getChildren().contains(title)) {
