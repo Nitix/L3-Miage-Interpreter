@@ -18,7 +18,8 @@ let var1 in
 			print "Value var 1 fils: ";
 			var1 := var1 * 3 + 1;
 			print var1;
-			return
+			return;
+			print "TROL";
 		else
 			var1 := var1+3;
 			print "Value var 1 pere: ";

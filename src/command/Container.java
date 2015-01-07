@@ -29,6 +29,8 @@ public class Container extends Command {
 			throws InterpreterException, InterruptedException {
 		LinkedList<Node> childs = node.getChilds();
 		for (Node child : childs) {
+			if(data.isTerminated())
+				break;
 			child.execute(data);
 			child.removeVariable(data);
 		}

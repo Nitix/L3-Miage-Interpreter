@@ -99,6 +99,9 @@ public class Parser {
 			this.readPrintCommand(node);
 		} else if (command.equalsIgnoreCase("return")){
 			node.add(new Node(new ReturnCommand(line), node));
+			command = this.readCommandName();
+			if (!command.equalsIgnoreCase(";"))
+				throw new SyntaxErrorException(this.line, command, "; expected");
 		} else {
 			if (Utils.isCommand(command))
 				throw new SyntaxErrorException(this.line, command);
