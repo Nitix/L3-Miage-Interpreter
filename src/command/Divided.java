@@ -4,27 +4,38 @@ import java.util.LinkedList;
 
 import environment.Data;
 import environment.Node;
-import environment.variable.BooleanVariable;
+import environment.variable.IntVariable;
 import environment.variable.Variable;
 import exception.IncorrectConversionException;
 import exception.InterpreterException;
 
 /**
- * The Class LowerComparatorCommand. Compare two expression
+ * The Class Divided. Divided two children,
  */
-public class LowerComparatorCommand extends Command {
+public class Divided extends Command {
 
 	/** The Constant serialVersionUID. */
-	private static final long serialVersionUID = -8312204629331907085L;
+	private static final long serialVersionUID = -2042457385400321447L;
 
 	/**
-	 * Instantiates a new lower comparator command.
+	 * Instantiates a new divided.
 	 *
 	 * @param line
 	 *            the line
 	 */
-	public LowerComparatorCommand(int line) {
-		super(line, "<");
+	public Divided(int line) {
+		super(line, "/");
+	}
+
+	/**
+	 * Checks if it's a divided command.
+	 *
+	 * @param command
+	 *            the command
+	 * @return true, if it's a divided command
+	 */
+	public static boolean isDividedCommand(String command) {
+		return command.equals("/");
 	}
 
 	/*
@@ -34,7 +45,7 @@ public class LowerComparatorCommand extends Command {
 	 */
 	@Override
 	public String toString() {
-		return "LowerComparatorCommand []";
+		return "Divided []";
 	}
 
 	/*
@@ -51,24 +62,17 @@ public class LowerComparatorCommand extends Command {
 		Command command1 = node1.getCommand();
 		Command command2 = node2.getCommand();
 		command1.execute(node1, data);
-		command2.execute(node2, data);
-
-		Variable var;
-
-		if (command1.getVariable(data).isIntValue()) {
-			if (!command2.getVariable(data).isIntValue()) {
-				throw new IncorrectConversionException(this.getLine(),
-						this.getCommand(),
-						"Can not compare int with boolean or fork");
-			}
-			var = new BooleanVariable(
-					command1.getVariable(data).getIntValue() < command2
-							.getVariable(data).getIntValue(), getId());
-		} else {
+		if (!command1.getVariable(data).isIntValue()) {
 			throw new IncorrectConversionException(this.getLine(),
-					this.getCommand(), "Must compare int");
+					this.getCommand());
 		}
-
+		command2.execute(node2, data);
+		if (!command2.getVariable(data).isIntValue()) {
+			throw new IncorrectConversionException(this.getLine(),
+					this.getCommand());
+		}
+		Variable var = new IntVariable(command1.getVariable(data).getIntValue()
+				/ command2.getVariable(data).getIntValue(), getId());
 		data.addVariable(this.getId(), var);
 	}
 

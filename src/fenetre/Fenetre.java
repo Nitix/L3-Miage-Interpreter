@@ -10,16 +10,16 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.PrintStream;
 
-import ast.AST;
 import command.IncorrectMethodCallException;
-import command.InexistantVariableException;
+import command.InexistentVariableException;
 import command.VariableAlreadyExistException;
 import command.VariableNotDeclaredException;
+import environment.AST;
 import exception.IncorrectConversionException;
 import exception.InterpreterException;
 import parser.Parser;
 import parser.SyntaxErrorException;
-import parser.UnexceptedEndOfFileException;
+import parser.UnexpectedEndOfFileException;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -37,16 +37,31 @@ import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
+/**
+ * The Class Fenetre. Display the graphic environment of the interpreter
+ */
 public class Fenetre extends Application {
-	
+
+	/** The parser. */
 	private Parser parser;
 
 	// Main method who launch the application.
+	/**
+	 * The main method.
+	 *
+	 * @param args
+	 *            the arguments
+	 */
 	public static void main(String[] args) {
 		launch(args);
 	}
 
 	// Start method for implement the stage.
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see javafx.application.Application#start(javafx.stage.Stage)
+	 */
 	public void start(Stage primaryStage) {
 
 		// Set window title & initialize the scene.
@@ -78,10 +93,9 @@ public class Fenetre extends Application {
 		Label response = new Label("Réponse : ");
 		FileChooser fileChooser = new FileChooser();
 		fileChooser.setInitialDirectory(new File("."));
-		
-		System.setOut(new PrintStream (new Writer(responsecommand)));
-		
-		
+
+		System.setOut(new PrintStream(new Writer(responsecommand)));
+
 		// Item of MenuBar :
 		// First Menu :
 		Label menuLabel = new Label("Ligne de commande");
@@ -94,80 +108,104 @@ public class Fenetre extends Application {
 				}
 				if (!vbox.getChildren().contains(manualcommand)
 						|| !vbox.getChildren().contains(title)) {
-					
+
 					final HBox command = new HBox();
 					command.setSpacing(10);
 					command.setPadding(new Insets(10, 10, 10, 10));
-					
-					command.getChildren().addAll(validatecommand, executecommand, sauvegarde, restauration);
-					
-					vbox.getChildren().addAll(title, manualcommand,
-							command, response, responsecommand);
+
+					command.getChildren().addAll(validatecommand,
+							executecommand, sauvegarde, restauration);
+
+					vbox.getChildren().addAll(title, manualcommand, command,
+							response, responsecommand);
 				}
 				vbox.setVisible(true);
 			}
 		});
-		
+
 		validatecommand.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent event) {
 				try {
 					parser.parse(manualcommand.getText());
 					manualcommand.clear();
-				}  catch (SyntaxErrorException e) {
-					System.out.println("Erreur syntaxique : Ligne " + e.getLineNumber() + ", commande : " + e.getCommand());
+				} catch (SyntaxErrorException e) {
+					System.out.println("Erreur syntaxique : Ligne "
+							+ e.getLineNumber() + ", commande : "
+							+ e.getCommand());
 					System.out.println(e.getMessage());
 					e.printStackTrace();
 				} catch (VariableNotDeclaredException e) {
-					System.out.println("Variable non déclaré : Ligne " + e.getLineNumber() + ", commande : " + e.getCommand());
+					System.out.println("Variable non déclaré : Ligne "
+							+ e.getLineNumber() + ", commande : "
+							+ e.getCommand());
 					System.out.println(e.getMessage());
 					e.printStackTrace();
 				} catch (IncorrectConversionException e) {
-					System.out.println("Conversion incorret : Ligne " + e.getLineNumber() + ", commande : " + e.getCommand());
+					System.out.println("Conversion incorret : Ligne "
+							+ e.getLineNumber() + ", commande : "
+							+ e.getCommand());
 					System.out.println(e.getMessage());
 					e.printStackTrace();
 				} catch (IOException e) {
 					System.out.println("IO error");
 					System.out.println(e.getMessage());
-				} 
+				}
 			}
 		});
 		executecommand.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent event) {
-				if(parser.isComplete()){
-					try{
+				if (parser.isComplete()) {
+					try {
 						parser.getAST().execute();
 					} catch (VariableAlreadyExistException e) {
-						System.out.println("Ne peut pas redeclarer la variable : Ligne " + e.getLineNumber() + ", commande : " + e.getCommand());
+						System.out
+								.println("Ne peut pas redeclarer la variable : Ligne "
+										+ e.getLineNumber()
+										+ ", commande : "
+										+ e.getCommand());
 						System.out.println(e.getMessage());
 					} catch (IncorrectMethodCallException e) {
-						System.out.println("Appel de méthode incorrect : Ligne " + e.getLineNumber() + ", commande : " + e.getCommand());
+						System.out
+								.println("Appel de méthode incorrect : Ligne "
+										+ e.getLineNumber() + ", commande : "
+										+ e.getCommand());
 						System.out.println(e.getMessage());
-					} catch (InexistantVariableException e) {
-						System.out.println("Variable non existante : Ligne " + e.getLineNumber() + ", commande : " + e.getCommand());
+					} catch (InexistentVariableException e) {
+						System.out.println("Variable non existante : Ligne "
+								+ e.getLineNumber() + ", commande : "
+								+ e.getCommand());
 						System.out.println(e.getMessage());
 						e.printStackTrace();
 					} catch (InterruptedException e) {
-						System.out.println("Exception d'interruption");		
+						System.out.println("Exception d'interruption");
 						System.out.println(e.getMessage());
 					} catch (SyntaxErrorException e) {
-						System.out.println("Erreur syntaxique : Ligne " + e.getLineNumber() + ", commande : " + e.getCommand());
+						System.out.println("Erreur syntaxique : Ligne "
+								+ e.getLineNumber() + ", commande : "
+								+ e.getCommand());
 						System.out.println(e.getMessage());
 						e.printStackTrace();
 					} catch (VariableNotDeclaredException e) {
-						System.out.println("Variable non déclaré : Ligne " + e.getLineNumber() + ", commande : " + e.getCommand());
+						System.out.println("Variable non déclaré : Ligne "
+								+ e.getLineNumber() + ", commande : "
+								+ e.getCommand());
 						System.out.println(e.getMessage());
 						e.printStackTrace();
 					} catch (IncorrectConversionException e) {
-						System.out.println("Conversion incorret : Ligne " + e.getLineNumber() + ", commande : " + e.getCommand());
+						System.out.println("Conversion incorret : Ligne "
+								+ e.getLineNumber() + ", commande : "
+								+ e.getCommand());
 						System.out.println(e.getMessage());
 						e.printStackTrace();
-					} catch (InterpreterException e){
-						System.out.println("Erreur d'éxecution : Ligne " + e.getLineNumber() + ", commande : " + e.getCommand());
+					} catch (InterpreterException e) {
+						System.out.println("Erreur d'éxecution : Ligne "
+								+ e.getLineNumber() + ", commande : "
+								+ e.getCommand());
 						System.out.println(e.getMessage());
 						e.printStackTrace();
 					}
-			
-				}else{
+
+				} else {
 					System.out.println("AST non complet");
 				}
 			}
@@ -175,21 +213,19 @@ public class Fenetre extends Application {
 		sauvegarde.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent event) {
 				fileChooser.setTitle("Sauvegarder AST");
-				FileChooser.ExtensionFilter extFilter = 
-		                new FileChooser.ExtensionFilter("Java fork interpreter AST (*.ji.ast)", "*.ji.ast");
+				FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter(
+						"Java fork interpreter AST (*.ji.ast)", "*.ji.ast");
 				fileChooser.getExtensionFilters().add(extFilter);
-				File file = fileChooser
-						.showSaveDialog(primaryStage);
+				File file = fileChooser.showSaveDialog(primaryStage);
 				if (file != null) {
 					ObjectOutputStream oos = null;
 					try {
 						oos = new ObjectOutputStream(new FileOutputStream(file));
 						oos.writeObject(parser.getAST());
 					} catch (IOException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
-					}finally{
-						if(oos != null ){
+					} finally {
+						if (oos != null) {
 							try {
 								oos.close();
 							} catch (IOException e) {
@@ -198,18 +234,17 @@ public class Fenetre extends Application {
 						}
 					}
 				}
-				
+
 			}
 		});
-		
+
 		restauration.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent event) {
 				fileChooser.setTitle("Charger l'AST");
-				FileChooser.ExtensionFilter extFilter = 
-		                new FileChooser.ExtensionFilter("Java fork interpreter AST (*.ji.ast)", "*.ji.ast");
+				FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter(
+						"Java fork interpreter AST (*.ji.ast)", "*.ji.ast");
 				fileChooser.getExtensionFilters().add(extFilter);
-				File file = fileChooser
-						.showOpenDialog(primaryStage);
+				File file = fileChooser.showOpenDialog(primaryStage);
 				if (file != null) {
 					ObjectInputStream ois = null;
 					try {
@@ -219,11 +254,12 @@ public class Fenetre extends Application {
 						System.out.println("Erreur IO");
 					} catch (ClassNotFoundException e) {
 						System.out.println("Erreur lors de la récuperation");
-					} catch(ClassCastException e){
-						System.out.println("Le fichier est incorrect ou corrompu");
-					} finally{
-				
-						if(ois != null ){
+					} catch (ClassCastException e) {
+						System.out
+								.println("Le fichier est incorrect ou corrompu");
+					} finally {
+
+						if (ois != null) {
 							try {
 								ois.close();
 							} catch (IOException e) {
@@ -232,22 +268,22 @@ public class Fenetre extends Application {
 						}
 					}
 				}
-				
+
 			}
 		});
 		Menu commandligne = new Menu();
 		commandligne.setGraphic(menuLabel);
-		
-		
 
 		// Second Menu :
 		Label menuLabel2 = new Label("Exécution à partir de fichier");
 		menuLabel2.setOnMouseClicked(new EventHandler<MouseEvent>() {
 			public void handle(MouseEvent event) {
-				if (vbox.getChildren().contains(manualcommand) || vbox.getChildren().contains(title)) {
+				if (vbox.getChildren().contains(manualcommand)
+						|| vbox.getChildren().contains(title)) {
 					vbox.getChildren().clear();
 				}
-				if (!vbox.getChildren().contains(chooser) || !vbox.getChildren().contains(titleChooser)) {
+				if (!vbox.getChildren().contains(chooser)
+						|| !vbox.getChildren().contains(titleChooser)) {
 					vbox.getChildren().addAll(titleChooser, chooser, response,
 							responsecommand);
 				}
@@ -257,30 +293,38 @@ public class Fenetre extends Application {
 		chooser.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent event) {
 				fileChooser.setTitle("Ouvrir un fichier");
-				FileChooser.ExtensionFilter extFilter = 
-		                new FileChooser.ExtensionFilter("Java fork interpreter (*.ji)", "*.ji");
+				FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter(
+						"Java fork interpreter (*.ji)", "*.ji");
 				fileChooser.getExtensionFilters().add(extFilter);
-				File file = fileChooser
-						.showOpenDialog(primaryStage);
+				File file = fileChooser.showOpenDialog(primaryStage);
 				if (file != null) {
 					try {
 						parser = new Parser(file);
 						parser.parse();
 						parser.getAST().execute();
 					} catch (VariableAlreadyExistException e) {
-						System.out.println("Ne peut pas redeclarer la variable : Ligne " + e.getLineNumber() + ", commande : " + e.getCommand());
+						System.out
+								.println("Ne peut pas redeclarer la variable : Ligne "
+										+ e.getLineNumber()
+										+ ", commande : "
+										+ e.getCommand());
 						System.out.println(e.getMessage());
 						e.printStackTrace();
 					} catch (IncorrectMethodCallException e) {
-						System.out.println("Appel de méthode incorrect : Ligne " + e.getLineNumber() + ", commande : " + e.getCommand());
+						System.out
+								.println("Appel de méthode incorrect : Ligne "
+										+ e.getLineNumber() + ", commande : "
+										+ e.getCommand());
 						System.out.println(e.getMessage());
 						e.printStackTrace();
-					} catch (InexistantVariableException e) {
-						System.out.println("Variable non existante : Ligne " + e.getLineNumber() + ", commande : " + e.getCommand());
+					} catch (InexistentVariableException e) {
+						System.out.println("Variable non existante : Ligne "
+								+ e.getLineNumber() + ", commande : "
+								+ e.getCommand());
 						System.out.println(e.getMessage());
 						e.printStackTrace();
 					} catch (InterruptedException e) {
-						System.out.println("Exception d'interruption");		
+						System.out.println("Exception d'interruption");
 						System.out.println(e.getMessage());
 						e.printStackTrace();
 					} catch (FileNotFoundException e) {
@@ -292,31 +336,41 @@ public class Fenetre extends Application {
 						System.out.println(e.getMessage());
 						e.printStackTrace();
 					} catch (SyntaxErrorException e) {
-						System.out.println("Erreur syntaxique : Ligne " + e.getLineNumber() + ", commande : " + e.getCommand());
+						System.out.println("Erreur syntaxique : Ligne "
+								+ e.getLineNumber() + ", commande : "
+								+ e.getCommand());
 						System.out.println(e.getMessage());
 						e.printStackTrace();
 					} catch (VariableNotDeclaredException e) {
-						System.out.println("Variable non déclaré : Ligne " + e.getLineNumber() + ", commande : " + e.getCommand());
+						System.out.println("Variable non déclaré : Ligne "
+								+ e.getLineNumber() + ", commande : "
+								+ e.getCommand());
 						System.out.println(e.getMessage());
 						e.printStackTrace();
 					} catch (IncorrectConversionException e) {
-						System.out.println("Conversion incorret : Ligne " + e.getLineNumber() + ", commande : " + e.getCommand());
+						System.out.println("Conversion incorret : Ligne "
+								+ e.getLineNumber() + ", commande : "
+								+ e.getCommand());
 						System.out.println(e.getMessage());
 						e.printStackTrace();
-					} catch (UnexceptedEndOfFileException e) {
-						System.out.println("Fin du fichier non attendu : Ligne " + e.getLineNumber() + ", commande : " + e.getCommand());
+					} catch (UnexpectedEndOfFileException e) {
+						System.out
+								.println("Fin du fichier non attendu : Ligne "
+										+ e.getLineNumber() + ", commande : "
+										+ e.getCommand());
 						System.out.println(e.getMessage());
 						e.printStackTrace();
-					} catch (InterpreterException e){
-						System.out.println("Erreur d'éxecution : Ligne " + e.getLineNumber() + ", commande : " + e.getCommand());
+					} catch (InterpreterException e) {
+						System.out.println("Erreur d'éxecution : Ligne "
+								+ e.getLineNumber() + ", commande : "
+								+ e.getCommand());
 						System.out.println(e.getMessage());
 						e.printStackTrace();
-					}finally{
-						if(parser != null){
+					} finally {
+						if (parser != null) {
 							try {
 								parser.close();
 							} catch (IOException e) {
-								// TODO Auto-generated catch block
 								e.printStackTrace();
 							}
 						}
@@ -324,11 +378,7 @@ public class Fenetre extends Application {
 				}
 			}
 		});
-		
-		
-		
-		
-		
+
 		Menu commandfile = new Menu();
 		commandfile.setGraphic(menuLabel2);
 

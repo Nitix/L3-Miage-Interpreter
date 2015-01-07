@@ -5,26 +5,43 @@ import java.io.OutputStream;
 
 import javafx.scene.control.TextArea;
 
-public class Writer extends OutputStream{
-	
- private final TextArea destination;
+/**
+ * The Class Writer. Helps to write stream to the TextArea of the application
+ */
+public class Writer extends OutputStream {
 
-    public Writer (TextArea destination)
-    {
-        this.destination = destination;
-    }
+	/** The destination. */
+	private final TextArea destination;
 
-    @Override
-    public void write(byte[] buffer, int offset, int length) throws IOException
-    {
-        final String text = new String (buffer, offset, length);
-        destination.appendText(text);
-    }
+	/**
+	 * Instantiates a new writer.
+	 *
+	 * @param destination
+	 *            the destination
+	 */
+	public Writer(TextArea destination) {
+		this.destination = destination;
+	}
 
-    @Override
-    public void write(int b) throws IOException
-    {
-        write (new byte [] {(byte)b}, 0, 1);
-    }
-	    
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.io.OutputStream#write(byte[], int, int)
+	 */
+	@Override
+	public void write(byte[] buffer, int offset, int length) throws IOException {
+		final String text = new String(buffer, offset, length);
+		destination.appendText(text);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.io.OutputStream#write(int)
+	 */
+	@Override
+	public void write(int b) throws IOException {
+		write(new byte[] { (byte) b }, 0, 1);
+	}
+
 }

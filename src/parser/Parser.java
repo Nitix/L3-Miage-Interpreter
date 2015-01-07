@@ -1,3 +1,9 @@
+/*
+ * Java fork interpreter
+ * @author Pierson Guillaume
+ * @author Hugo Yohann
+ * @author Sambou Fikoul-Françoise
+ */
 package parser;
 
 import java.io.ByteArrayInputStream;
@@ -8,66 +14,141 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PushbackReader;
 
-import ast.AST;
-import ast.Node;
 import command.*;
+import environment.AST;
+import environment.Node;
 import exception.IncorrectConversionException;
 
+/**
+ * The Class Parser. Read from different stream Create the AST
+ */
 public class Parser {
 
+	/** The reader. */
 	private PushbackReader reader;
 
-	private AST ast = new AST(); 
+	/** The ast. */
+	private AST ast = new AST();
+
+	/** The unread command. */
 	private String unReadCommand = null;
 
+	/** The program is in a loop */
 	private boolean isLoop = false;
+
+	/** The program is finish. Used with exit */
 	private boolean isFinish = false;
-	
+
+	/** The program is complete. */
 	private boolean isComplete = false;
-	
+
+	/** The current line. */
 	private int line = 1;
 
+	/**
+	 * Instantiates a new parser.
+	 */
 	public Parser() {
 		this.reader = new PushbackReader(new InputStreamReader(System.in));
 	}
 
+	/**
+	 * Instantiates a new parser.
+	 *
+	 * @param file
+	 *            the file
+	 * @throws FileNotFoundException
+	 *             the file not found exception
+	 */
 	public Parser(String file) throws FileNotFoundException {
 		this.reader = new PushbackReader(new FileReader(file));
 	}
 
+	/**
+	 * Instantiates a new parser.
+	 *
+	 * @param file
+	 *            the file
+	 * @throws FileNotFoundException
+	 *             the file not found exception
+	 */
 	public Parser(File file) throws FileNotFoundException {
 		this.reader = new PushbackReader(new FileReader(file));
 	}
-	
-	public AST getAST(){
+
+	/**
+	 * Gets the ast.
+	 *
+	 * @return the ast
+	 */
+	public AST getAST() {
 		ast.setLine(line);
 		return this.ast;
 	}
-	
+
+	/**
+	 * Checks if it's a complete.
+	 *
+	 * @return true, if it's a complete
+	 */
 	public boolean isComplete() {
 		return isComplete;
 	}
-	
-	public void close() throws IOException{
+
+	/**
+	 * Close.
+	 *
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 */
+	public void close() throws IOException {
 		this.reader.close();
 	}
-	
-	
+
+	/**
+	 * Parses the.
+	 *
+	 * @param string
+	 *            the string
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 * @throws SyntaxErrorException
+	 *             the syntax error exception
+	 * @throws VariableNotDeclaredException
+	 *             the variable not declared exception
+	 * @throws IncorrectConversionException
+	 *             the incorrect conversion exception
+	 */
 	public void parse(String string) throws IOException, SyntaxErrorException,
-		VariableNotDeclaredException, IncorrectConversionException {
+			VariableNotDeclaredException, IncorrectConversionException {
 		this.reader.close();
-		this.reader = new PushbackReader(new InputStreamReader(new ByteArrayInputStream(string.getBytes())));
-		try{
+		this.reader = new PushbackReader(new InputStreamReader(
+				new ByteArrayInputStream(string.getBytes())));
+		try {
 			parse();
-		}catch(UnexceptedEndOfFileException e){
+		} catch (UnexpectedEndOfFileException e) {
 			e.printStackTrace();
 		}
 	}
 
+	/**
+	 * Parses the.
+	 *
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 * @throws SyntaxErrorException
+	 *             the syntax error exception
+	 * @throws VariableNotDeclaredException
+	 *             the variable not declared exception
+	 * @throws IncorrectConversionException
+	 *             the incorrect conversion exception
+	 * @throws UnexpectedEndOfFileException
+	 *             the unexpected end of file exception
+	 */
 	public void parse() throws IOException, SyntaxErrorException,
 			VariableNotDeclaredException, IncorrectConversionException,
-			UnexceptedEndOfFileException {
-		Node racine = this.ast.getRacine();
+			UnexpectedEndOfFileException {
+		Node racine = this.ast.getRoot();
 		while (!this.isEndOfFile() && !this.isFinish) {
 			isComplete = false;
 			this.readCommand(racine);
@@ -75,9 +156,25 @@ public class Parser {
 		isComplete = true;
 	}
 
+	/**
+	 * Read command.
+	 *
+	 * @param node
+	 *            the node
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 * @throws SyntaxErrorException
+	 *             the syntax error exception
+	 * @throws VariableNotDeclaredException
+	 *             the variable not declared exception
+	 * @throws IncorrectConversionException
+	 *             the incorrect conversion exception
+	 * @throws UnexpectedEndOfFileException
+	 *             the unexpected end of file exception
+	 */
 	private void readCommand(Node node) throws IOException,
 			SyntaxErrorException, VariableNotDeclaredException,
-			IncorrectConversionException, UnexceptedEndOfFileException {
+			IncorrectConversionException, UnexpectedEndOfFileException {
 
 		String command = this.readCommandName();
 		if (command.equalsIgnoreCase("end")) { // Fin de boucle on retourne en
@@ -97,7 +194,7 @@ public class Parser {
 			this.isFinish = true;
 		} else if (command.equalsIgnoreCase("print")) {
 			this.readPrintCommand(node);
-		} else if (command.equalsIgnoreCase("return")){
+		} else if (command.equalsIgnoreCase("return")) {
 			node.add(new Node(new ReturnCommand(line), node));
 			command = this.readCommandName();
 			if (!command.equalsIgnoreCase(";"))
@@ -109,20 +206,54 @@ public class Parser {
 		}
 	}
 
-	private void readPrintCommand(Node node) throws UnexceptedEndOfFileException, IOException, SyntaxErrorException {
+	/**
+	 * Read print command.
+	 *
+	 * @param node
+	 *            the node
+	 * @throws UnexpectedEndOfFileException
+	 *             the unexpected end of file exception
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 * @throws SyntaxErrorException
+	 *             the syntax error exception
+	 */
+	private void readPrintCommand(Node node)
+			throws UnexpectedEndOfFileException, IOException,
+			SyntaxErrorException {
 		String command = readCommandName();
 
-		if(Utils.isCommand(command)){
-			throw new SyntaxErrorException(line, command, "Text or Variable or Value expected");
+		if (Utils.isCommand(command)) {
+			throw new SyntaxErrorException(line, command,
+					"Text or Variable or Value expected");
 		}
-		node.add(new Node(new PrintCommand(line, command, command.startsWith("\"")), node));
+		node.add(new Node(new PrintCommand(line, command, command
+				.startsWith("\"")), node));
 		command = this.readCommandName();
 		if (!command.equalsIgnoreCase(";"))
 			throw new SyntaxErrorException(this.line, command, "; expected");
 	}
 
+	/**
+	 * Read affection command.
+	 *
+	 * @param var
+	 *            the var
+	 * @param node
+	 *            the node
+	 * @throws UnexpectedEndOfFileException
+	 *             the unexpected end of file exception
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 * @throws SyntaxErrorException
+	 *             the syntax error exception
+	 * @throws VariableNotDeclaredException
+	 *             the variable not declared exception
+	 * @throws IncorrectConversionException
+	 *             the incorrect conversion exception
+	 */
 	private void readAffectionCommand(String var, Node node)
-			throws UnexceptedEndOfFileException, IOException,
+			throws UnexpectedEndOfFileException, IOException,
 			SyntaxErrorException, VariableNotDeclaredException,
 			IncorrectConversionException {
 		String command = this.readCommandName();
@@ -134,13 +265,14 @@ public class Parser {
 		command = this.readCommandName();
 		if (command.equalsIgnoreCase("fork()")) {
 			assign.add(new Node(new ForkCommand(line), assign));
-		} else if(command.equalsIgnoreCase("wait(")){
+		} else if (command.equalsIgnoreCase("wait(")) {
 			command = this.readCommandName();
-			if(Utils.isCommand(command))
-				throw new SyntaxErrorException(line, command, "Fork variable expected");
+			if (Utils.isCommand(command))
+				throw new SyntaxErrorException(line, command,
+						"Fork variable expected");
 			assign.add(new Node(new WaitCommand(command, line), assign));
 			command = this.readCommandName();
-			if(!command.equals(")"))
+			if (!command.equals(")"))
 				throw new SyntaxErrorException(line, command, ") expected");
 		} else {
 			this.unReadCommand = command;
@@ -151,7 +283,23 @@ public class Parser {
 			throw new SyntaxErrorException(this.line, command, "; expected");
 	}
 
-	private void readLetcommand(Node node) throws UnexceptedEndOfFileException,
+	/**
+	 * Read letcommand.
+	 *
+	 * @param node
+	 *            the node
+	 * @throws UnexpectedEndOfFileException
+	 *             the unexpected end of file exception
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 * @throws SyntaxErrorException
+	 *             the syntax error exception
+	 * @throws VariableNotDeclaredException
+	 *             the variable not declared exception
+	 * @throws IncorrectConversionException
+	 *             the incorrect conversion exception
+	 */
+	private void readLetcommand(Node node) throws UnexpectedEndOfFileException,
 			IOException, SyntaxErrorException, VariableNotDeclaredException,
 			IncorrectConversionException {
 		String var = this.readCommandName();
@@ -187,8 +335,17 @@ public class Parser {
 		}
 	}
 
+	/**
+	 * Read command name.
+	 *
+	 * @return the string
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 * @throws UnexpectedEndOfFileException
+	 *             the unexpected end of file exception
+	 */
 	private String readCommandName() throws IOException,
-			UnexceptedEndOfFileException {
+			UnexpectedEndOfFileException {
 		if (this.unReadCommand != null) {
 			String cmd = this.unReadCommand;
 			this.unReadCommand = null;
@@ -199,17 +356,17 @@ public class Parser {
 
 		String command = "";
 		if (charac == -1)
-			throw new UnexceptedEndOfFileException(line, command);
+			throw new UnexpectedEndOfFileException(line, command);
 
-		if(charac == '"'){
+		if (charac == '"') {
 			boolean ignoreChar = true;
 			while (charac != -1) {
-				if(charac == '\\')
+				if (charac == '\\')
 					ignoreChar = true;
-				if(charac == '"'){
-					if(ignoreChar){
+				if (charac == '"') {
+					if (ignoreChar) {
 						ignoreChar = false;
-					}else{
+					} else {
 						command += (char) charac;
 						break;
 					}
@@ -217,9 +374,9 @@ public class Parser {
 				command += (char) charac;
 				charac = reader.read();
 			}
-			if(charac == -1)
-				throw new UnexceptedEndOfFileException(line, command);
-		}else{
+			if (charac == -1)
+				throw new UnexpectedEndOfFileException(line, command);
+		} else {
 			boolean ok = false;
 			boolean isUniqueChar = true;
 			boolean isparenthesis = false;
@@ -237,27 +394,27 @@ public class Parser {
 							ok = true;
 						}
 					} else {
-						if(isparenthesis && charac != ')'){
+						if (isparenthesis && charac != ')') {
 							reader.unread(charac);
 							ok = true;
-						}else{
-							if(charac == '('){
+						} else {
+							if (charac == '(') {
 								isparenthesis = true;
 								command += (char) charac;
 								charac = reader.read();
-							}else if(charac == ')'){
-								if(!isparenthesis){
-									if(isUniqueChar){
+							} else if (charac == ')') {
+								if (!isparenthesis) {
+									if (isUniqueChar) {
 										command += (char) charac;
-									}else{
+									} else {
 										reader.unread(charac);
 									}
 									ok = true;
-								}else{
+								} else {
 									command += (char) charac;
 									ok = true;
 								}
-							}else{
+							} else {
 								command += (char) charac;
 								charac = reader.read();
 							}
@@ -271,9 +428,25 @@ public class Parser {
 
 	}
 
+	/**
+	 * Read if command.
+	 *
+	 * @param node
+	 *            the node
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 * @throws SyntaxErrorException
+	 *             the syntax error exception
+	 * @throws VariableNotDeclaredException
+	 *             the variable not declared exception
+	 * @throws IncorrectConversionException
+	 *             the incorrect conversion exception
+	 * @throws UnexpectedEndOfFileException
+	 *             the unexpected end of file exception
+	 */
 	private void readIfCommand(Node node) throws IOException,
 			SyntaxErrorException, VariableNotDeclaredException,
-			IncorrectConversionException, UnexceptedEndOfFileException {
+			IncorrectConversionException, UnexpectedEndOfFileException {
 
 		// Ajout de la commande dans l'arbre
 		Node ifnode = new Node(new IfCommand(line), node);
@@ -311,8 +484,24 @@ public class Parser {
 		}
 	}
 
+	/**
+	 * Read while command.
+	 *
+	 * @param node
+	 *            the node
+	 * @throws SyntaxErrorException
+	 *             the syntax error exception
+	 * @throws UnexpectedEndOfFileException
+	 *             the unexpected end of file exception
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 * @throws VariableNotDeclaredException
+	 *             the variable not declared exception
+	 * @throws IncorrectConversionException
+	 *             the incorrect conversion exception
+	 */
 	private void readWhileCommand(Node node) throws SyntaxErrorException,
-			UnexceptedEndOfFileException, IOException,
+			UnexpectedEndOfFileException, IOException,
 			VariableNotDeclaredException, IncorrectConversionException {
 		// Ajout de la commande dans l'arbre
 		Node whilenode = new Node(new WhileCommand(line), node);
@@ -336,14 +525,36 @@ public class Parser {
 		}
 	}
 
+	/**
+	 * Read expression.
+	 *
+	 * @param node
+	 *            the node
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 * @throws SyntaxErrorException
+	 *             the syntax error exception
+	 * @throws VariableNotDeclaredException
+	 *             the variable not declared exception
+	 * @throws IncorrectConversionException
+	 *             the incorrect conversion exception
+	 * @throws UnexpectedEndOfFileException
+	 *             the unexpected end of file exception
+	 */
 	private void readExpression(Node node) throws IOException,
 			SyntaxErrorException, VariableNotDeclaredException,
-			IncorrectConversionException, UnexceptedEndOfFileException {
+			IncorrectConversionException, UnexpectedEndOfFileException {
 
 		ExpressionReader er = new ExpressionReader(node);
 		er.parseExpression();
 	}
 
+	/**
+	 * Ignore all spaces and newline
+	 *
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 */
 	private void ignoreSpace() throws IOException {
 		int charac = reader.read();
 		boolean ok = false;
@@ -366,6 +577,13 @@ public class Parser {
 		}
 	}
 
+	/**
+	 * Checks if it's the end of file.
+	 *
+	 * @return true, if it's an end of file
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 */
 	private boolean isEndOfFile() throws IOException {
 		if (this.unReadCommand != null)
 			return false;
@@ -374,15 +592,35 @@ public class Parser {
 		return charac == -1;
 	}
 
+	/**
+	 * Checks if it is an empty char.
+	 *
+	 * @param c
+	 *            the c
+	 * @return true, if it's an empty char
+	 */
 	private boolean isEmptyChar(int c) {
 		return c == '	' || c == ' ' || c == '\n' || c == '\r';
 	}
 
+	/**
+	 * Checks if it is an unique char command.
+	 *
+	 * @param c
+	 *            the c
+	 * @return true, if it's an unique char command
+	 */
 	private boolean isUniqueCharCommand(int c) {
 		return c == ';' || c == '*' || c == '/' || c == '+' || c == '-';
 	}
 
-
+	/**
+	 * Checks if it's an integer.
+	 *
+	 * @param str
+	 *            the str
+	 * @return true, if it's an integer
+	 */
 	public static boolean isInteger(String str) {
 		if (str == null) {
 			return false;
@@ -407,39 +645,73 @@ public class Parser {
 		return true;
 	}
 
-	private class ExpressionReader { // FIXME Prioity AND OR
+	/**
+	 * Sets the ast.
+	 *
+	 * @param ast
+	 *            the new ast
+	 */
+	public void setAST(AST ast) {
+		this.ast = ast;
+		this.line = ast.getLine();
+	}
+
+	/**
+	 * The Class ExpressionReader. Read boolean and int expression
+	 */
+	private class ExpressionReader {
 		// Prochaine valeur attendu : valeur
+		/** The reader needs next value. */
 		private boolean needNextValue = false;
 
 		// Dernière opération * ou / donc priorité
+		/** The last operator was * or /. */
 		private boolean isPrio = false;
 
 		// Dernier node avec le quel ona fait +
+		/** The simple operator node. */
 		private Node simpleOperatorNode = null;
 
 		// Dernier node sur lequel travailler
+		/** The current node. */
 		private Node currentNode = null;
 
+		/** The top boolean node. */
 		private Node topBooleanNode = null;
 
+		/** The reader needs need boolean operator. */
 		private boolean needBooleanOperator = false;
 
+		/** This portion is boolean expression. */
 		private boolean isBooleanExpression = false;
 
+		/** The reader needs operator. */
 		private boolean needOperator = false;
 
+		/** The reader needs boolean expression. */
 		private boolean needBooleanExpression = false;
 
+		/** The next value is top. */
 		private boolean nextValueIsTop = true;
 
+		/** The next operator is boolean top. */
 		private boolean nextOperatorIsBooleanTop;
 
+		/** The next value is boolean top. */
 		private boolean nextValueIsBooleanTop = true;
 
+		/** The command is not command. */
 		private boolean isNotCommand = false;
 
+		/** The next operator is top. */
 		private boolean nextOperatorIsTop;
 
+		/**
+		 * Instantiates a new expression reader.
+		 *
+		 * @param node
+		 *            the node
+		 */
 		public ExpressionReader(Node node) {
 			this.simpleOperatorNode = node;
 			this.currentNode = node;
@@ -447,7 +719,19 @@ public class Parser {
 			this.nextOperatorIsBooleanTop = true;
 		}
 
-		public void parseExpression() throws UnexceptedEndOfFileException,
+		/**
+		 * Parses the expression.
+		 *
+		 * @throws UnexpectedEndOfFileException
+		 *             the unexpected end of file exception
+		 * @throws IOException
+		 *             Signals that an I/O exception has occurred.
+		 * @throws VariableNotDeclaredException
+		 *             the variable not declared exception
+		 * @throws SyntaxErrorException
+		 *             the syntax error exception
+		 */
+		public void parseExpression() throws UnexpectedEndOfFileException,
 				IOException, VariableNotDeclaredException, SyntaxErrorException {
 			this.readValue();
 			while (!this.isExpressionEnded()) {
@@ -458,21 +742,35 @@ public class Parser {
 				}
 			}
 			if (this.needBooleanExpression || this.needNextValue)
-				throw new SyntaxErrorException(line, "Expression", "End of expression needed");
+				throw new SyntaxErrorException(line, "Expression",
+						"End of expression needed");
 		}
 
-		private void readOperator() throws UnexceptedEndOfFileException,
+		/**
+		 * Read operator.
+		 *
+		 * @throws UnexpectedEndOfFileException
+		 *             the unexpected end of file exception
+		 * @throws IOException
+		 *             Signals that an I/O exception has occurred.
+		 * @throws SyntaxErrorException
+		 *             the syntax error exception
+		 */
+		private void readOperator() throws UnexpectedEndOfFileException,
 				IOException, SyntaxErrorException {
 			String command = readCommandName();
 			if (!Utils.isOperatorCommand(command))
-				throw new SyntaxErrorException(line, command, "Operator expected");
+				throw new SyntaxErrorException(line, command,
+						"Operator expected");
 			if (this.needBooleanOperator
 					&& !Utils.isBooleanOperatorCommand(command))
-				throw new SyntaxErrorException(line, command, "Boolean expected");
+				throw new SyntaxErrorException(line, command,
+						"Boolean expected");
 
 			if (Utils.isBooleanOperatorCommand(command)) {
 				if (!this.isBooleanExpression)
-					throw new SyntaxErrorException(line, command, "Can not use int with boolean expression");
+					throw new SyntaxErrorException(line, command,
+							"Can not use int with boolean expression");
 				Node operator;
 				if (command.equalsIgnoreCase("and")) {
 					operator = new Node(new AndOperator(line),
@@ -501,7 +799,7 @@ public class Parser {
 					if (Times.isTimesCommand(command)) {
 						commandC = new Times(line);
 					} else {
-						commandC = new Devided(line);
+						commandC = new Divided(line);
 					}
 
 					Node n = new Node(commandC, currentNode.getFather());
@@ -567,7 +865,19 @@ public class Parser {
 			this.nextOperatorIsTop = false;
 		}
 
-		private void readValue() throws UnexceptedEndOfFileException,
+		/**
+		 * Read value.
+		 *
+		 * @throws UnexpectedEndOfFileException
+		 *             the unexpected end of file exception
+		 * @throws IOException
+		 *             Signals that an I/O exception has occurred.
+		 * @throws VariableNotDeclaredException
+		 *             the variable not declared exception
+		 * @throws SyntaxErrorException
+		 *             the syntax error exception
+		 */
+		private void readValue() throws UnexpectedEndOfFileException,
 				IOException, VariableNotDeclaredException, SyntaxErrorException {
 			String command = readCommandName();
 			if (Utils.isSystemCommand(command))
@@ -577,7 +887,8 @@ public class Parser {
 			// La valeur est un booléen
 			if (command.equalsIgnoreCase("true")
 					|| command.equalsIgnoreCase("false")) {
-				value = new Node(new BooleanType(command, line), this.currentNode);
+				value = new Node(new BooleanType(command, line),
+						this.currentNode);
 				this.currentNode.add(value);
 				this.isBooleanExpression = true;
 				this.needBooleanOperator = true;
@@ -587,8 +898,10 @@ public class Parser {
 				// La valeur est un entier
 			} else if (isInteger(command)) {
 				if (isNotCommand)
-					throw new SyntaxErrorException(line, command, "Can not convert an int to boolean");
-				value = new Node(new IntegerType(command, line), this.currentNode);
+					throw new SyntaxErrorException(line, command,
+							"Can not convert an int to boolean");
+				value = new Node(new IntegerType(command, line),
+						this.currentNode);
 				this.currentNode.add(value);
 				this.needBooleanOperator = false;
 			} else {
@@ -636,16 +949,20 @@ public class Parser {
 			}
 		}
 
+		/**
+		 * Checks if the expression is ended.
+		 *
+		 * @return true, if it's an expression ended
+		 * @throws UnexpectedEndOfFileException
+		 *             the unexpected end of file exception
+		 * @throws IOException
+		 *             Signals that an I/O exception has occurred.
+		 */
 		private boolean isExpressionEnded()
-				throws UnexceptedEndOfFileException, IOException {
+				throws UnexpectedEndOfFileException, IOException {
 			String command = readCommandName();
 			unReadCommand = command;
 			return Utils.isSystemCommand(command);
 		}
-	}
-
-	public void setAST(AST ast) {
-		this.ast = ast;
-		this.line = ast.getLine();
 	}
 }

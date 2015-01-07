@@ -2,10 +2,10 @@ package command;
 
 import java.util.LinkedList;
 
-import ast.Data;
-import ast.Node;
-import ast.variable.BooleanVariable;
-import ast.variable.Variable;
+import environment.Data;
+import environment.Node;
+import environment.variable.BooleanVariable;
+import environment.variable.Variable;
 import exception.IncorrectConversionException;
 import exception.InterpreterException;
 
@@ -26,11 +26,11 @@ public class EqualComparatorCommand extends Command {
 	}
 
 	@Override
-	public void execute(Node node, Data data)
-			throws InterpreterException, InterruptedException {
-		LinkedList<Node> childs = node.getChilds();
-		Node node1 = childs.get(0);
-		Node node2 = childs.get(1);
+	public void execute(Node node, Data data) throws InterpreterException,
+			InterruptedException {
+		LinkedList<Node> children = node.getChilds();
+		Node node1 = children.get(0);
+		Node node2 = children.get(1);
 		Command command1 = node1.getCommand();
 		Command command2 = node2.getCommand();
 		command1.execute(node1, data);
@@ -39,31 +39,36 @@ public class EqualComparatorCommand extends Command {
 		Variable var;
 		if (command1.getVariable(data).isBooleanValue()) {
 			if (!command2.getVariable(data).isBooleanValue()) {
-				throw new IncorrectConversionException(this.getLine(), this.getCommand());
+				throw new IncorrectConversionException(this.getLine(),
+						this.getCommand());
 			}
-			var = new BooleanVariable(command1.getVariable(data).getBooleanValue() == command2
-					.getVariable(data).getBooleanValue(), getUuid());
+			var = new BooleanVariable(command1.getVariable(data)
+					.getBooleanValue() == command2.getVariable(data)
+					.getBooleanValue(), getId());
 		} else {
 			if (command1.getVariable(data).isIntValue()) {
 				if (!command2.getVariable(data).isIntValue()) {
-					throw new IncorrectConversionException(this.getLine(), this.getCommand());
+					throw new IncorrectConversionException(this.getLine(),
+							this.getCommand());
 				}
-				var = new BooleanVariable(command1.getVariable(data).getIntValue() == command2
-						.getVariable(data).getIntValue(), getUuid());
+				var = new BooleanVariable(command1.getVariable(data)
+						.getIntValue() == command2.getVariable(data)
+						.getIntValue(), getId());
 			} else {
-				throw new IncorrectConversionException(this.getLine(), this.getCommand());
+				throw new IncorrectConversionException(this.getLine(),
+						this.getCommand());
 			}
 		}
 
-		data.addVariable(this.getUuid(), var);
+		data.addVariable(this.getId(), var);
 	}
 
 	@Override
 	public boolean hasValue(Data data) {
 		return true;
 	}
-	
-	public Variable getVariable(Data data) throws InexistantVariableException{
-		return data.getVariable(getUuid(), getLine());
+
+	public Variable getVariable(Data data) throws InexistentVariableException {
+		return data.getVariable(getId(), getLine());
 	}
 }
