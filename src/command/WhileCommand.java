@@ -4,7 +4,6 @@ import java.util.LinkedList;
 
 import ast.Data;
 import ast.Node;
-import ast.variable.Variable;
 import exception.IncorrectConversionException;
 import exception.InterpreterException;
 
@@ -38,7 +37,6 @@ public class WhileCommand extends Command {
 			childs.get(1).execute(data);
 			childs.get(1).removeVariable(data);
 			exp.execute(childs.get(0), data);
-			Variable var = exp.getVariable(data);
 			if (!exp.getVariable(data).isBooleanValue()) {
 				throw new IncorrectConversionException(this.getLine(), this.getCommand());
 			}

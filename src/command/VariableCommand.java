@@ -1,7 +1,6 @@
 package command;
 
 import ast.Data;
-import ast.Fork;
 import ast.Node;
 import ast.variable.Variable;
 import exception.InterpreterException;
