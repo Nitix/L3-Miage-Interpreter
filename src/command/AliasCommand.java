@@ -31,7 +31,7 @@ public class AliasCommand extends Command {
 			throws InterpreterException, InterruptedException {
 		if (!data.isDeclaredVariable(ori))
 			throw new InexistantVariableException(this.getLine(), this.getCommand());
-		Variable var = new AliasVariable(data.getVariable(ori, this.getLine()));
+		Variable var = new AliasVariable(data.getVariable(ori, this.getLine()), getUuid());
 		data.addVariable(alias, var);
 		node.getChilds().get(0).execute(data);
 		node.getChilds().get(0).removeVariable(data);

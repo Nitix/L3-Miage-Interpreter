@@ -1,7 +1,6 @@
 package AST.variable;
 
 import command.IncorrectMethodCallException;
-
 import AST.Fork;
 
 public class ForkVariable extends Variable{
@@ -10,24 +9,26 @@ public class ForkVariable extends Variable{
 	
 	private Fork fork;
 	
-	public ForkVariable() {
+	public ForkVariable(String name) {
+		super(name);
 	}
 	
-	public ForkVariable(Fork fork, String forkname) {
+	public ForkVariable(Fork fork, String forkname, String name) {
+		super(name);
 		this.fork = fork;
 		this.forkName = forkname;
 	}
 	
 	@Override
 	public Variable copy() {
-		return new ForkVariable(fork, forkName);
+		return new ForkVariable(fork, forkName, getName());
 	}
 
 	@Override
-	public void setFork(Fork fork, String forkName)
-			throws IncorrectMethodCallException {
+	public Variable setFork(Fork fork, String forkName) {
 		this.fork = fork;
 		this.forkName = forkName;
+		return this;
 	}
 
 	@Override
@@ -45,4 +46,13 @@ public class ForkVariable extends Variable{
 		return true;
 	}
 
+	@Override
+	public Variable setBooleanValue(boolean booleanValue) {
+		return new BooleanVariable(booleanValue, getName());
+	}
+	
+	@Override
+	public Variable setIntValue(int intValue) {
+		return new IntVariable(intValue, getName());
+	}
 }

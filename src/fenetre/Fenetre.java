@@ -77,6 +77,7 @@ public class Fenetre extends Application {
 		Label titleChooser = new Label("Choisir un fichier :");
 		Label response = new Label("Réponse : ");
 		FileChooser fileChooser = new FileChooser();
+		fileChooser.setInitialDirectory(new File("."));
 		
 		System.setOut(new PrintStream (new Writer(responsecommand)));
 		
@@ -269,9 +270,11 @@ public class Fenetre extends Application {
 					} catch (VariableAlreadyExistException e) {
 						System.out.println("Ne peut pas redeclarer la variable : Ligne " + e.getLineNumber() + ", commande : " + e.getCommand());
 						System.out.println(e.getMessage());
+						e.printStackTrace();
 					} catch (IncorrectMethodCallException e) {
 						System.out.println("Appel de méthode incorrect : Ligne " + e.getLineNumber() + ", commande : " + e.getCommand());
 						System.out.println(e.getMessage());
+						e.printStackTrace();
 					} catch (InexistantVariableException e) {
 						System.out.println("Variable non existante : Ligne " + e.getLineNumber() + ", commande : " + e.getCommand());
 						System.out.println(e.getMessage());
@@ -279,12 +282,15 @@ public class Fenetre extends Application {
 					} catch (InterruptedException e) {
 						System.out.println("Exception d'interruption");		
 						System.out.println(e.getMessage());
+						e.printStackTrace();
 					} catch (FileNotFoundException e) {
 						System.out.println("Fichier non trouvé");
 						System.out.println(e.getMessage());
+						e.printStackTrace();
 					} catch (IOException e) {
 						System.out.println("IO error");
 						System.out.println(e.getMessage());
+						e.printStackTrace();
 					} catch (SyntaxErrorException e) {
 						System.out.println("Erreur syntaxique : Ligne " + e.getLineNumber() + ", commande : " + e.getCommand());
 						System.out.println(e.getMessage());

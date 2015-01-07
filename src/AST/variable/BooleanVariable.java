@@ -1,5 +1,6 @@
 package AST.variable;
 
+import AST.Fork;
 import command.IncorrectMethodCallException;
 
 
@@ -7,18 +8,19 @@ public class BooleanVariable extends Variable {
 
 	private boolean booleanvalue;
 	
-	public BooleanVariable() {
-		// TODO Auto-generated constructor stub
+	public BooleanVariable(String name) {
+		super(name);
 	}
 
-	public BooleanVariable(boolean boolvalue) {
+	public BooleanVariable(boolean boolvalue, String name) {
+		super(name);
 		this.booleanvalue = boolvalue;
 	}
 	
 	@Override
-	public void setBooleanValue(boolean booleanValue)
-			throws IncorrectMethodCallException {
+	public Variable setBooleanValue(boolean booleanValue) {
 		this.booleanvalue = booleanValue;
+		return this;
 	}
 
 	@Override
@@ -33,7 +35,17 @@ public class BooleanVariable extends Variable {
 
 	@Override
 	public Variable copy() {
-		return new BooleanVariable(booleanvalue);
+		return new BooleanVariable(booleanvalue, getName());
+	}
+
+	@Override
+	public Variable setIntValue(int intValue) {
+		return new IntVariable(intValue, getName());
+	}
+
+	@Override
+	public Variable setFork(Fork fork, String forkName) {
+		return new ForkVariable(fork, forkName, getName());
 	}
 
 }

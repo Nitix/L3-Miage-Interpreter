@@ -25,14 +25,14 @@ public class WaitCommand extends Command {
 			throws InterpreterException, InterruptedException{
 		Variable forkVar = data.getVariable(this.forkName, this.getLine());
 		if(!forkVar.isFork()){
-			throw new IncorrectMethodCallException(this.getIntValue(data), "wait()", "Can not call wait on non fork variable");
+			throw new IncorrectMethodCallException(this.getLine(), "wait()", "Can not call wait on non fork variable");
 		}
 		Fork fork = forkVar.getFork();
 		if(fork == null){
-			throw new IncorrectMethodCallException(this.getIntValue(data), "wait()", "Fork variable is empty");
+			throw new IncorrectMethodCallException(this.getLine(), "wait()", "Fork variable is empty");
 		}
 		fork.join();
-		Variable var = new IntVariable();
+		Variable var = new IntVariable(getUuid());
 
 		if(fork.hasException()){
 			var.setIntValue(-1);
@@ -46,17 +46,8 @@ public class WaitCommand extends Command {
 	public boolean hasValue(Data data) throws InexistantVariableException {
 		return true;
 	}
-
-	@Override
-	public boolean hasIntValue(Data data) throws InexistantVariableException {
-		return true;
-	}
-
-	@Override
-	public int getIntValue(Data data) throws IncorrectMethodCallException,
-			InexistantVariableException {
-		return data.getVariable(getUuid(), getLine()).getIntValue();
-	}
 	
-
+	public Variable getVariable(Data data) throws InexistantVariableException{
+		return data.getVariable(getUuid(), getLine());
+	}
 }

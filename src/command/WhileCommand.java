@@ -6,6 +6,7 @@ import exception.IncorrectConversionException;
 import exception.InterpreterException;
 import AST.Data;
 import AST.Node;
+import AST.variable.Variable;
 
 public class WhileCommand extends Command {
 
@@ -29,15 +30,16 @@ public class WhileCommand extends Command {
 		LinkedList<Node> childs = node.getChilds();
 		Command exp = childs.get(0).getCommand();
 		exp.execute(childs.get(0), data);
-		if (!exp.hasBooleanValue(data)) {
+		if (!exp.getVariable(data).isBooleanValue()) {
 			throw new IncorrectConversionException(this.getLine(), this.getCommand());
 		}
-		while (exp.getBooleanValue(data)) {
+		while (exp.getVariable(data).getBooleanValue()) {
 			exp.removeVariable(data);
 			childs.get(1).execute(data);
 			childs.get(1).removeVariable(data);
 			exp.execute(childs.get(0), data);
-			if (!exp.hasBooleanValue(data)) {
+			Variable var = exp.getVariable(data);
+			if (!exp.getVariable(data).isBooleanValue()) {
 				throw new IncorrectConversionException(this.getLine(), this.getCommand());
 			}
 		}

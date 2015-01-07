@@ -32,8 +32,8 @@ public class IfCommand extends Command {
 		if (!exp.hasValue(data)) {
 			throw new IncorrectConversionException(this.getLine(), this.getCommand());
 		}
-		if(exp.hasBooleanValue(data)){
-			if (exp.getBooleanValue(data)) {
+		if(exp.getVariable(data).isBooleanValue()){
+			if (exp.getVariable(data).getBooleanValue()) {
 				childs.get(1).execute(data);
 				childs.get(1).removeVariable(data);
 			} else {
@@ -42,8 +42,8 @@ public class IfCommand extends Command {
 					childs.get(2).removeVariable(data);
 				}
 			}
-		}else if(exp.hasIntValue(data)){
-			if (exp.getIntValue(data) > 0) {
+		}else if(exp.getVariable(data).isIntValue()){
+			if (exp.getVariable(data).getIntValue() > 0) {
 				childs.get(1).execute(data);
 				childs.get(1).removeVariable(data);
 			} else {
@@ -52,8 +52,8 @@ public class IfCommand extends Command {
 					childs.get(2).removeVariable(data);
 				}
 			}
-		}else if(exp.isFork(data)){
-			if (exp.getForkName(data) == null) {
+		}else if(exp.getVariable(data).isFork()){
+			if (exp.getVariable(data).getForkName() == null) {
 				childs.get(1).execute(data);
 				childs.get(1).removeVariable(data);
 			} else {

@@ -38,14 +38,14 @@ public class Minus extends Command {
 		Command command1 = node1.getCommand();
 		Command command2 = node2.getCommand();
 		command1.execute(node1, data);
-		if (!command1.hasIntValue(data)) {
+		if (!command1.getVariable(data).isIntValue()) {
 			throw new IncorrectConversionException(this.getLine(), this.getCommand());
 		}
 		command2.execute(node2, data);
-		if (!command2.hasIntValue(data)) {
+		if (!command2.getVariable(data).isIntValue()) {
 			throw new IncorrectConversionException(this.getLine(), this.getCommand());
 		}
-		Variable var = new IntVariable(command1.getIntValue(data) + command2.getIntValue(data));
+		Variable var = new IntVariable(command1.getVariable(data).getIntValue() + command2.getVariable(data).getIntValue(), getUuid());
 		data.addVariable(this.getUuid(), var);
 	}
 
@@ -53,15 +53,8 @@ public class Minus extends Command {
 	public boolean hasValue(Data data) {
 		return true;
 	}
-
-	@Override
-	public boolean hasIntValue(Data data) {
-		return true;
-	}
-
-	@Override
-	public int getIntValue(Data data) throws IncorrectMethodCallException,
-			InexistantVariableException {
-		return data.getVariable(this.getUuid(), this.getLine()).getIntValue();
+	
+	public Variable getVariable(Data data) throws InexistantVariableException{
+		return data.getVariable(getUuid(), getLine());
 	}
 }

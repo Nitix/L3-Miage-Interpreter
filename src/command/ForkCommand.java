@@ -28,7 +28,7 @@ public class ForkCommand extends Command {
 	@Override
 	public void execute(Node node, Data data)
 			throws InterpreterException, InterruptedException {
-		Variable var = new ForkVariable();
+		Variable var = new ForkVariable(getUuid());
 		data.addVariable(getUuid(), var);
 		Data duplicate = data.deepClone();
 		Fork fork = new Fork(node.getFather(), duplicate);
@@ -40,24 +40,8 @@ public class ForkCommand extends Command {
 	public boolean hasValue(Data data) throws InexistantVariableException {
 		return true;
 	}
-
-	@Override
-	public boolean isFork(Data data) throws InexistantVariableException {
-		return true;
-	}
-
-	@Override
-	public String getForkName(Data data) throws IncorrectMethodCallException,
-			InexistantVariableException {
-		return data.getVariable(this.getUuid(), this.getLine()).getForkName();
-	}
-
-	@Override
-	public Fork getFork(Data data) throws IncorrectMethodCallException,
-			InexistantVariableException {
-		return data.getVariable(this.getUuid(), this.getLine()).getFork();
-	}
-
-
 	
+	public Variable getVariable(Data data) throws InexistantVariableException{
+		return data.getVariable(getUuid(), getLine());
+	}
 }

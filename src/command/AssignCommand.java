@@ -33,17 +33,34 @@ public class AssignCommand extends Command {
 		Node value = node.getChilds().get(0);
 		value.execute(data);
 		Command valueCommand = value.getCommand();
-		Variable var;
+		Variable var = data.getVariable(nameVariable, getLine());
+
 		if(!valueCommand.hasValue(data))
 			throw new IncorrectMethodCallException(this.getLine(), this.getCommand());
-		if(valueCommand.hasIntValue(data)){
-			var = new IntVariable(valueCommand.getIntValue(data));
-		}else if(valueCommand.hasBooleanValue(data)){
-			var = new BooleanVariable(valueCommand.getBooleanValue(data));
-		}else if(valueCommand.isFork(data)){
-			var = new ForkVariable(valueCommand.getFork(data), valueCommand.getForkName(data));
+		Variable child = valueCommand.getVariable(data);
+		
+		if(var.isAlias()){
+			var = data.getVariable(nameVariable, getLine());
+			if(child.isIntValue()){
+				var = var.setIntValue(child.getIntValue());
+			}else if(child.isBooleanValue()){
+				var = var.setBooleanValue(child.getBooleanValue());
+			}else if(child.isFork()){
+				var = var.setFork(child.getFork(), child.getForkName());
+			}else{
+				throw new IncorrectConversionException(this.getLine(), this.getCommand());
+			}
+
 		}else{
-			throw new IncorrectConversionException(this.getLine(), this.getCommand());
+			if(child.isIntValue()){
+				var = new IntVariable(child.getIntValue(), nameVariable);
+			}else if(child.isBooleanValue()){
+				var = new BooleanVariable(child.getBooleanValue(), nameVariable);
+			}else if(child.isFork()){
+				var = new ForkVariable(child.getFork(), child.getForkName(), nameVariable);
+			}else{
+				throw new IncorrectConversionException(this.getLine(), this.getCommand());
+			}
 		}
 		data.addVariable(nameVariable, var);
 		value.removeVariable(data);
@@ -56,10 +73,16 @@ public class AssignCommand extends Command {
 			VariableNotDeclaredException, InterruptedException {
 		Node value = node.getChilds().get(0);
 		Command valueCommand = value.getCommand();
-		if(!valueCommand.isFork(data)){
+		if(!valueCommand.getVariable(data).isFork()){
 			throw new IncorrectMethodCallException(getLine(), getCommand());
 		}
-		Variable var = new ForkVariable(valueCommand.getFork(data), valueCommand.getForkName(data));
+		Variable child = valueCommand.getVariable(data);
+		Variable var = data.getVariable(nameVariable, getLine());
+		if(child.isAlias()){
+			var = var.setFork(child.getFork(), child.getForkName());
+		}else{
+			var = new ForkVariable(child.getFork(), child.getForkName(), nameVariable);
+		}
 		data.addVariable(nameVariable, var);
 		value.removeVariable(data);
 

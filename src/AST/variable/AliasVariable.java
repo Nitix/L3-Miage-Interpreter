@@ -6,28 +6,16 @@ import command.IncorrectMethodCallException;
 public class AliasVariable extends Variable{
 	
 	Variable var;
+	Variable old;
 	
-	public AliasVariable(){
-		
-	}
-	
-	public AliasVariable(Variable var) {
+	public AliasVariable(Variable var, String name) {
+		super(name);
 		this.var = var;
 	}
 
 	@Override
 	public Variable copy() {
-		return new AliasVariable(var);
-	}
-
-	@Override
-	public void setAlias(Variable alias) throws IncorrectMethodCallException {
-		this.var = alias;
-	}
-
-	@Override
-	public Variable getAlias() throws IncorrectMethodCallException {
-		return var;
+		return new AliasVariable(var, getName());
 	}
 
 	@Override
@@ -36,20 +24,32 @@ public class AliasVariable extends Variable{
 	}
 
 	@Override
-	public void setIntValue(int intValue) throws IncorrectMethodCallException {
-		var.setIntValue(intValue);
+	public Variable setIntValue(int intValue) {
+		if(var.isAlias())
+			return var.setIntValue(intValue);
+		else
+			var = var.setIntValue(intValue);
+		return var;
 	}
 
 	@Override
-	public void setBooleanValue(boolean booleanValue)
-			throws IncorrectMethodCallException {
-		var.setBooleanValue(booleanValue);
+	public Variable setBooleanValue(boolean booleanValue){
+		if(var.isAlias())
+			return var.setBooleanValue(booleanValue);
+		else 
+			var = var.setBooleanValue(booleanValue);
+		return var;
+
 	}
 
 	@Override
-	public void setFork(Fork fork, String forkName)
-			throws IncorrectMethodCallException {
-		var.setFork(fork, forkName);
+	public Variable setFork(Fork fork, String forkName) {
+		if(var.isAlias())
+			return var.setFork(fork, forkName);
+		else
+			var = var.setFork(fork, forkName);
+		return var;
+
 	}
 
 	@Override
@@ -90,5 +90,10 @@ public class AliasVariable extends Variable{
 	@Override
 	public boolean isEmpty() {
 		return var.isEmpty();
+	}
+
+	@Override
+	public Variable getAlias() throws IncorrectMethodCallException {
+		return var;
 	}
 }

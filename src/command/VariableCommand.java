@@ -4,6 +4,7 @@ import exception.InterpreterException;
 import AST.Data;
 import AST.Fork;
 import AST.Node;
+import AST.variable.Variable;
 
 public class VariableCommand extends Command {
 
@@ -35,36 +36,7 @@ public class VariableCommand extends Command {
 		return true;
 	}
 
-	public boolean hasIntValue(Data data) throws InexistantVariableException {
-		return data.getVariable(name, this.getLine()).isIntValue();
-	}
-
-	public int getIntValue(Data data) throws IncorrectMethodCallException,
-			InexistantVariableException {
-		return data.getVariable(name, this.getLine()).getIntValue();
-	}
-
-	public boolean hasBooleanValue(Data data)
-			throws InexistantVariableException {
-		return data.getVariable(name, this.getLine()).isBooleanValue();
-	}
-
-	public boolean getBooleanValue(Data data)
-			throws IncorrectMethodCallException, InexistantVariableException {
-		return data.getVariable(name, this.getLine()).getBooleanValue();
-	}
-
-	public boolean isFork(Data data) throws InexistantVariableException {
-		return data.getVariable(name, this.getLine()).isFork();
-	}
-
-	public String getForkName(Data data) throws IncorrectMethodCallException,
-			InexistantVariableException {
-		return data.getVariable(name, this.getLine()).getForkName();
-	}
-	
-	public Fork getFork(Data data) throws IncorrectMethodCallException,
-	InexistantVariableException {
-		return data.getVariable(name, this.getLine()).getFork();
+	public Variable getVariable(Data data) throws InexistantVariableException{
+		return data.getVariable(name, getLine());
 	}
 }

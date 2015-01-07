@@ -438,6 +438,8 @@ public class Parser {
 
 		private boolean isNotCommand = false;
 
+		private boolean nextOperatorIsTop;
+
 		public ExpressionReader(Node node) {
 			this.simpleOperatorNode = node;
 			this.currentNode = node;
@@ -507,11 +509,11 @@ public class Parser {
 					currentNode.getFather().remplace(currentNode, n);
 					currentNode.setFather(n);
 					n.add(currentNode);
+					if (this.nextOperatorIsTop) {
+						simpleOperatorNode = n;
+					}
 					if (!isPrio) {
 						isPrio = true;
-						if (this.nextValueIsTop) {
-							simpleOperatorNode = n;
-						}
 					}
 					currentNode = n;
 
@@ -562,6 +564,7 @@ public class Parser {
 			}
 			this.needOperator = false;
 			this.needNextValue = true;
+			this.nextOperatorIsTop = false;
 		}
 
 		private void readValue() throws UnexceptedEndOfFileException,
@@ -588,7 +591,6 @@ public class Parser {
 				value = new Node(new IntegerType(command, line), this.currentNode);
 				this.currentNode.add(value);
 				this.needBooleanOperator = false;
-
 			} else {
 				if (command.equalsIgnoreCase("not")) {
 					// Utilisation de variable, aucune erreur ne peut être
@@ -626,6 +628,7 @@ public class Parser {
 			if (this.nextValueIsTop) {
 				this.simpleOperatorNode = value;
 				this.nextValueIsTop = false;
+				this.nextOperatorIsTop = true;
 			}
 			this.currentNode = value;
 			if (this.isNotCommand) {

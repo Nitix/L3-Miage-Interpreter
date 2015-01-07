@@ -38,12 +38,12 @@ public class LowerComparatorCommand extends Command {
 
 		Variable var;
 		
-		if (command1.hasIntValue(data)) {
-			if (!command2.hasIntValue(data)) {
+		if (command1.getVariable(data).isIntValue()) {
+			if (!command2.getVariable(data).isIntValue()) {
 				throw new IncorrectConversionException(this.getLine(), this.getCommand(), "Can not compare int with boolean or fork");
 			}
-			var = new BooleanVariable(command1.getIntValue(data) < command2
-					.getIntValue(data));
+			var = new BooleanVariable(command1.getVariable(data).getIntValue() < command2
+					.getVariable(data).getIntValue(), getUuid());
 		} else {
 			throw new IncorrectConversionException(this.getLine(), this.getCommand(), "Must compare int");
 		}
@@ -56,14 +56,7 @@ public class LowerComparatorCommand extends Command {
 		return true;
 	}
 
-	@Override
-	public boolean hasBooleanValue(Data data) {
-		return true;
-	}
-
-	@Override
-	public boolean getBooleanValue(Data data)
-			throws IncorrectMethodCallException, InexistantVariableException {
-		return data.getVariable(this.getUuid(), this.getLine()).getBooleanValue();
+	public Variable getVariable(Data data) throws InexistantVariableException{
+		return data.getVariable(getUuid(), getLine());
 	}
 }

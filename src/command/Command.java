@@ -6,8 +6,8 @@ import java.util.UUID;
 import exception.IncorrectConversionException;
 import exception.InterpreterException;
 import AST.Data;
-import AST.Fork;
 import AST.Node;
+import AST.variable.Variable;
 
 public abstract class Command implements Serializable {
 
@@ -61,38 +61,8 @@ public abstract class Command implements Serializable {
 		return false;
 	}
 
-	public boolean hasIntValue(Data data) throws InexistantVariableException {
-		return false;
-	}
-
-	public int getIntValue(Data data) throws IncorrectMethodCallException,
-			InexistantVariableException {
-		throw new IncorrectMethodCallException(line, command);
-	}
-
-	public boolean hasBooleanValue(Data data)
-			throws InexistantVariableException {
-		return false;
-	}
-
-	public boolean getBooleanValue(Data data)
-			throws IncorrectMethodCallException, InexistantVariableException {
-		throw new IncorrectMethodCallException(line, command);
-
-	}
-
-	public boolean isFork(Data data) throws InexistantVariableException {
-		return false;
-	}
-
-	public String getForkName(Data data) throws IncorrectMethodCallException,
-			InexistantVariableException {
-		throw new IncorrectMethodCallException(line, command);
-	}
-
-	public Fork getFork(Data data) throws IncorrectMethodCallException,
-	InexistantVariableException {
-		throw new IncorrectMethodCallException(line, command);
+	public Variable getVariable(Data data) throws IncorrectMethodCallException, InexistantVariableException{
+		throw new IncorrectMethodCallException();
 	}
 	
 	public int getLine() {

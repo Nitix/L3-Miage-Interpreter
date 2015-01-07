@@ -1,45 +1,40 @@
 package AST.variable;
 
 import command.IncorrectMethodCallException;
-
 import AST.Fork;
 
 public abstract class Variable {
 
-	public void setIntValue(int intValue)  throws IncorrectMethodCallException{
-		throw new IncorrectMethodCallException();
+	private String name;
+	
+	public Variable(String name){
+		this.name = name;
 	}
+	
+	public abstract Variable setIntValue(int intValue);
 
-	public void setBooleanValue(boolean booleanValue)  throws IncorrectMethodCallException{
-		throw new IncorrectMethodCallException();
-	}
-	public void setFork(Fork fork, String forkName) throws IncorrectMethodCallException{
-		throw new IncorrectMethodCallException();
-	}
+	public abstract Variable setBooleanValue(boolean booleanValue);
+	
+	public abstract Variable setFork(Fork fork, String forkName);
 
-	public void setAlias(Variable alias)  throws IncorrectMethodCallException{
-		throw new IncorrectMethodCallException();
-	}
-
-	public Variable getAlias() throws IncorrectMethodCallException{
-		throw new IncorrectMethodCallException();
-	}
-
-	public  int getIntValue()  throws IncorrectMethodCallException{
-		throw new IncorrectMethodCallException();
-
+	public  int getIntValue() throws IncorrectMethodCallException{
+		throw new IncorrectMethodCallException(-1, name);
 	}
 
 	public Fork getFork()  throws IncorrectMethodCallException{
-		throw new IncorrectMethodCallException();
+		throw new IncorrectMethodCallException(-1, name);
 	}
 	
 	public String getForkName()  throws IncorrectMethodCallException{
-		throw new IncorrectMethodCallException();
+		throw new IncorrectMethodCallException(-1, name);
 	}
 
 	public boolean getBooleanValue()  throws IncorrectMethodCallException {
-		throw new IncorrectMethodCallException();
+		throw new IncorrectMethodCallException(-1, name);
+	}
+
+	public Variable getAlias()  throws IncorrectMethodCallException {
+		throw new IncorrectMethodCallException(-1, name);
 	}
 
 	public boolean isIntValue() {
@@ -63,4 +58,8 @@ public abstract class Variable {
 	}
 
 	public abstract Variable copy();
+
+	public String getName() {
+		return this.name;
+	}
 }

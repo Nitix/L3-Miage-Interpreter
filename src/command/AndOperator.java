@@ -34,16 +34,15 @@ public class AndOperator extends Command {
 		Command command1 = node1.getCommand();
 		Command command2 = node2.getCommand();
 		command1.execute(node1, data);
-		if (!command1.hasBooleanValue(data)) {
+		if (!command1.getVariable(data).isBooleanValue()) {
 			throw new IncorrectConversionException(this.getLine(), this.getCommand());
 		}
 		command2.execute(node2, data);
-		if (!command2.hasBooleanValue(data)) {
+		if (!command2.getVariable(data).isBooleanValue()) {
 			throw new IncorrectConversionException(this.getLine(), this.getCommand());
 		}
-		Variable var = new BooleanVariable();
-		var.setBooleanValue(command1.getBooleanValue(data)
-				&& command2.getBooleanValue(data));
+		Variable var = new BooleanVariable(command1.getVariable(data).getBooleanValue()
+				&& command2.getVariable(data).getBooleanValue(), getUuid());
 		data.addVariable(this.getUuid(), var);
 	}
 
@@ -51,15 +50,8 @@ public class AndOperator extends Command {
 	public boolean hasValue(Data data) {
 		return true;
 	}
-
-	@Override
-	public boolean hasBooleanValue(Data data) {
-		return true;
-	}
-
-	@Override
-	public boolean getBooleanValue(Data data)
-			throws IncorrectMethodCallException, InexistantVariableException {
-		return data.getVariable(this.getUuid(), this.getLine()).getBooleanValue();
+	
+	public Variable getVariable(Data data) throws InexistantVariableException{
+		return data.getVariable(getUuid(), getLine());
 	}
 }

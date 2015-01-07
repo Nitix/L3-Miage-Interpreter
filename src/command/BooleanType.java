@@ -3,6 +3,8 @@ package command;
 import exception.InterpreterException;
 import AST.Data;
 import AST.Node;
+import AST.variable.BooleanVariable;
+import AST.variable.Variable;
 
 public class BooleanType extends Command {
 
@@ -25,25 +27,17 @@ public class BooleanType extends Command {
 	@Override
 	public void execute(Node node, Data data)
 			throws InterpreterException, InexistantVariableException {
-		//Do Nothing
+		BooleanVariable var = new BooleanVariable(value, getUuid());
+		data.addVariable(getUuid(), var);
 	}
 
 	@Override
 	public boolean hasValue(Data data) throws InexistantVariableException {
 		return true;
-	}
-
-	@Override
-	public boolean hasBooleanValue(Data data)
-			throws InexistantVariableException {
-		return true;
-	}
-
-	@Override
-	public boolean getBooleanValue(Data data)
-			throws IncorrectMethodCallException, InexistantVariableException {
-		return  value;
-	}
+	}	
 	
 	
+	public Variable getVariable(Data data) throws InexistantVariableException{
+		return data.getVariable(getUuid(), getLine());
+	}
 }

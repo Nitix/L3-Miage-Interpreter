@@ -26,7 +26,7 @@ public class Data implements Serializable {
 			throws VariableAlreadyExistException {
 		if (this.variables.containsKey(nameVariable))
 			throw new VariableAlreadyExistException(line, nameVariable);
-		Variable var = new EmptyVariable();
+		Variable var = new EmptyVariable(nameVariable);
 		this.addVariable(nameVariable, var);
 	}
 
@@ -60,6 +60,10 @@ public class Data implements Serializable {
 
 	public void setTerminated(boolean terminated) {
 		this.isTerminated = terminated;
+	}
+
+	public void remplaceVariable(Variable newVar) {
+		this.variables.put(newVar.getName(), newVar);
 	}
 
 }

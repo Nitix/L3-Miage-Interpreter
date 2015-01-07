@@ -33,10 +33,10 @@ public class NotCommand extends Command {
 		Command command1 = node1.getCommand();
 		command1.execute(node1, data);
 
-		if (!command1.hasBooleanValue(data)) {
+		if (!command1.getVariable(data).isBooleanValue()) {
 			throw new IncorrectConversionException(this.getLine(), this.getCommand());
 		}
-		Variable var = new BooleanVariable(!command1.getBooleanValue(data));
+		Variable var = new BooleanVariable(!command1.getVariable(data).getBooleanValue(), getUuid());
 
 		data.addVariable(this.getUuid(), var);
 	}
@@ -45,15 +45,8 @@ public class NotCommand extends Command {
 	public boolean hasValue(Data data) {
 		return true;
 	}
-
-	@Override
-	public boolean hasBooleanValue(Data data) {
-		return true;
-	}
-
-	@Override
-	public boolean getBooleanValue(Data data)
-			throws IncorrectMethodCallException, InexistantVariableException {
-		return data.getVariable(this.getUuid(), this.getLine()).getBooleanValue();
+	
+	public Variable getVariable(Data data) throws InexistantVariableException{
+		return data.getVariable(getUuid(), getLine());
 	}
 }

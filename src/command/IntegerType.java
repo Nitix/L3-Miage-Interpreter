@@ -3,6 +3,8 @@ package command;
 import exception.InterpreterException;
 import AST.Data;
 import AST.Node;
+import AST.variable.IntVariable;
+import AST.variable.Variable;
 
 public class IntegerType extends Command {
 
@@ -31,25 +33,16 @@ public class IntegerType extends Command {
 	@Override
 	public void execute(Node node, Data data)
 			throws InterpreterException, InterruptedException {
-		//DO nothing
+		IntVariable var = new IntVariable(value, getUuid());
+		data.addVariable(getUuid(), var);
 	}
 
 	@Override
 	public boolean hasValue(Data data) throws InexistantVariableException {
 		return true;
 	}
-
-	@Override
-	public boolean hasIntValue(Data data) throws InexistantVariableException {
-		return true;
+	
+	public Variable getVariable(Data data) throws InexistantVariableException{
+		return data.getVariable(getUuid(), getLine());
 	}
-
-	@Override
-	public int getIntValue(Data data) throws IncorrectMethodCallException,
-			InexistantVariableException {
-		return value;
-	}
-	
-	
-	
 }
